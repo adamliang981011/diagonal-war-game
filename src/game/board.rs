@@ -1,3 +1,5 @@
+use std::hash::{Hash, Hasher};
+
 use crate::game::piece::PieceVariant;
 use crate::game::player::PlayerId;
 
@@ -6,6 +8,18 @@ use crate::game::player::PlayerId;
 pub enum CellState {
     Empty,
     Occupied(PlayerId),
+}
+
+impl Hash for CellState {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        match self {
+            CellState::Empty => 0u8.hash(state),
+            CellState::Occupied(pid) => {
+                1u8.hash(state);
+                pid.0.hash(state);
+            }
+        }
+    }
 }
 
 /// 放置錯誤類型
@@ -49,7 +63,24 @@ impl Corner {
     }
 }
 
+impl<const N: usize> Hash for Board<N> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        for row in self.cells.iter() {
+            for cell in row.iter() {
+                cell.hash(state);
+            }
+        }
+    }
+}
+
 impl<const N: usize> Board<N> {
+    /// 快速盤面雜湊值（用於開局書查詢）
+    pub fn board_hash(&self) -> u64 {
+        use std::hash::DefaultHasher;
+        let mut hasher = DefaultHasher::new();
+        Hash::hash(self, &mut hasher);
+        hasher.finish()
+    }
     /// 建立空棋盤
     pub fn new() -> Self {
         Self {

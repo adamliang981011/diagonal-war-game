@@ -1,6 +1,7 @@
 use bevy::picking::Pickable;
 use bevy::prelude::*;
 
+use crate::ai::AiDifficulty;
 use crate::state::{GameConfig, GamePhase, GameResource};
 use crate::ui::panel::PiecePreviewRoot;
 use crate::ui::styles::*;
@@ -33,6 +34,17 @@ impl Plugin for MenuPlugin {
         app.add_systems(Update, show_menu_screen)
             .add_systems(Update, button_style_system)
             .add_systems(Update, handle_menu_clicks);
+    }
+}
+
+fn difficulty_label(diff: &AiDifficulty) -> &'static str {
+    match diff {
+        AiDifficulty::Random => "Lv1 隨機",
+        AiDifficulty::Greedy => "Lv2 貪婪",
+        AiDifficulty::GreedyWithTemp(_) => "Lv3 多變",
+        AiDifficulty::Search1Ply => "Lv4 前瞻1",
+        AiDifficulty::Search2Ply => "Lv5 前瞻2",
+        AiDifficulty::Mcts { .. } => "Lv6 MCTS",
     }
 }
 
@@ -128,6 +140,11 @@ fn show_menu_screen(
 
             for i in 0..4 {
                 let visible = i < config.player_count;
+                let label = if i < config.is_ai.len() && config.is_ai[i] {
+                    difficulty_label(&config.ai_difficulties[i])
+                } else {
+                    "人類"
+                };
                 parent
                     .spawn((
                         Node {
@@ -141,7 +158,6 @@ fn show_menu_screen(
                         PlayerSlotRoot { player_index: i },
                     ))
                     .with_children(|row| {
-                        let ai_label = if config.is_ai.get(i).copied().unwrap_or(false) { "AI" } else { "人類" };
                         row.spawn((
                             Text::new(format!("玩家 {}", i + 1)),
                             TextFont { font: FontSource::Handle(f.clone()), font_size: FontSize::Px(22.0), ..default() },
@@ -153,7 +169,7 @@ fn show_menu_screen(
                             Pickable::default(),
                             Interaction::default(),
                             Node {
-                                width: Val::Px(100.0),
+                                width: Val::Px(120.0),
                                 height: Val::Px(36.0),
                                 justify_content: JustifyContent::Center,
                                 align_items: AlignItems::Center,
@@ -164,7 +180,7 @@ fn show_menu_screen(
                         ))
                         .with_children(|btn| {
                             btn.spawn((
-                                Text::new(ai_label),
+                                Text::new(label),
                                 TextFont { font: FontSource::Handle(f.clone()), font_size: FontSize::Px(16.0), ..default() },
                                 TextColor(Color::WHITE),
                                 TextLayout { justify: Justify::Center, ..default() },
@@ -206,16 +222,21 @@ fn button_style_system(
 ) {
     for (interaction, mut color) in &mut query {
         match *interaction {
-            Interaction::Pressed => {
-                *color = BackgroundColor(Color::srgb(0.4, 0.4, 0.4));
-            }
-            Interaction::Hovered => {
-                *color = BackgroundColor(Color::srgb(0.5, 0.5, 0.5));
-            }
-            Interaction::None => {
-                *color = BackgroundColor(Color::srgb(0.3, 0.3, 0.3));
-            }
+            Interaction::Pressed => { *color = BackgroundColor(Color::srgb(0.4, 0.4, 0.4)); }
+            Interaction::Hovered => { *color = BackgroundColor(Color::srgb(0.5, 0.5, 0.5)); }
+            Interaction::None => { *color = BackgroundColor(Color::srgb(0.3, 0.3, 0.3)); }
         }
+    }
+}
+
+fn next_difficulty(current: &AiDifficulty) -> (AiDifficulty, bool, &'static str) {
+    match current {
+        AiDifficulty::Random => (AiDifficulty::Greedy, true, "Lv2 貪婪"),
+        AiDifficulty::Greedy => (AiDifficulty::GreedyWithTemp(0.3), true, "Lv3 多變"),
+        AiDifficulty::GreedyWithTemp(_) => (AiDifficulty::Search1Ply, true, "Lv4 前瞻1"),
+        AiDifficulty::Search1Ply => (AiDifficulty::Search2Ply, true, "Lv5 前瞻2"),
+        AiDifficulty::Search2Ply => (AiDifficulty::Mcts { iterations: 500 }, true, "Lv6 MCTS"),
+        AiDifficulty::Mcts { .. } => (AiDifficulty::Random, false, "人類"),
     }
 }
 
@@ -232,10 +253,12 @@ fn handle_menu_clicks(
 ) {
     for (interaction, btn) in &interaction_query {
         if *interaction == Interaction::Pressed {
-            config.player_count = btn.count;
-            config.is_ai.resize(btn.count, false);
+            let count = btn.count;
+            config.player_count = count;
+            config.is_ai.resize(count, false);
+            config.ai_difficulties.resize(count, AiDifficulty::Greedy);
             for (slot, mut vis) in &mut slot_query {
-                *vis = if slot.player_index < btn.count {
+                *vis = if slot.player_index < count {
                     Visibility::Visible
                 } else {
                     Visibility::Hidden
@@ -248,13 +271,31 @@ fn handle_menu_clicks(
         if *interaction == Interaction::Pressed {
             let idx = toggle.player_index;
             if idx < config.player_count {
-                config.is_ai[idx] = !config.is_ai[idx];
-                for (entity, atb) in &ai_button_query {
-                    if atb.player_index == idx {
-                        if let Ok(children) = children_query.get(entity) {
-                            if let Some(&child) = children.first() {
-                                if let Ok(mut text) = text_query.get_mut(child) {
-                                    *text = Text::new(if config.is_ai[idx] { "AI" } else { "人類" });
+                if config.is_ai[idx] {
+                    let (new_diff, new_is_ai, new_label) = next_difficulty(&config.ai_difficulties[idx]);
+                    config.ai_difficulties[idx] = new_diff;
+                    config.is_ai[idx] = new_is_ai;
+                    for (entity, atb) in &ai_button_query {
+                        if atb.player_index == idx {
+                            if let Ok(children) = children_query.get(entity) {
+                                if let Some(&child) = children.first() {
+                                    if let Ok(mut text) = text_query.get_mut(child) {
+                                        *text = Text::new(new_label);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    config.is_ai[idx] = true;
+                    config.ai_difficulties[idx] = AiDifficulty::Random;
+                    for (entity, atb) in &ai_button_query {
+                        if atb.player_index == idx {
+                            if let Ok(children) = children_query.get(entity) {
+                                if let Some(&child) = children.first() {
+                                    if let Ok(mut text) = text_query.get_mut(child) {
+                                        *text = Text::new("Lv1 隨機");
+                                    }
                                 }
                             }
                         }

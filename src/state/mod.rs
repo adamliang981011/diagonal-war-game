@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 
-use crate::ai::greedy::{AiMove, choose_move};
+use crate::ai::opening_book::OpeningBook;
+use crate::ai::{AiDifficulty, AiMove, choose_move as ai_choose};
 use crate::game::board::Board;
 use crate::game::piece_library;
 use crate::game::player::{starting_corner_for_player, Player, PlayerId};
@@ -34,6 +35,7 @@ pub struct GameResource {
 pub struct GameConfig {
     pub player_count: usize,
     pub is_ai: Vec<bool>,
+    pub ai_difficulties: Vec<AiDifficulty>,
 }
 
 impl Default for GameConfig {
@@ -41,6 +43,7 @@ impl Default for GameConfig {
         Self {
             player_count: 2,
             is_ai: vec![false, false],
+            ai_difficulties: vec![AiDifficulty::Greedy, AiDifficulty::Greedy],
         }
     }
 }
@@ -59,6 +62,17 @@ impl Default for AiTimer {
             active: false,
             computed_move: None,
         }
+    }
+}
+
+#[derive(Resource)]
+pub struct OpeningBookResource {
+    pub book: OpeningBook,
+}
+
+impl Default for OpeningBookResource {
+    fn default() -> Self {
+        Self { book: OpeningBook::new() }
     }
 }
 
@@ -160,6 +174,7 @@ pub fn handle_ai_turn(
     config: Res<GameConfig>,
     mut ai_timer: ResMut<AiTimer>,
     time: Res<Time>,
+    book: Res<OpeningBookResource>,
 ) {
     if game.phase != GamePhase::Selecting {
         ai_timer.active = false;
@@ -183,7 +198,35 @@ pub fn handle_ai_turn(
         let corner = game.starting_corner();
         let board_copy = game.board.clone();
 
-        let mv = choose_move(&board_copy, pid, &remaining, is_first, corner);
+        // 檢查開局書
+        let mv = if let Some(entry) = book.book.lookup(board_copy.board_hash()) {
+            // 開局書的 piece_index 是基於完整棋子庫，需轉換為 remaining 中的索引
+            let full_id = crate::game::piece_library::create_all_pieces()[entry.best_piece].id;
+            if let Some(pi) = remaining.iter().position(|p| p.id == full_id) {
+                let variant = &remaining[pi].variants[entry.best_variant];
+                // 驗證開局書回傳的步在當前盤面是否合法
+                if board_copy.is_valid(variant, entry.best_x, entry.best_y, pid, is_first, corner).is_ok() {
+                    Some(AiMove {
+                        piece_index: pi,
+                        variant_index: entry.best_variant,
+                        x: entry.best_x,
+                        y: entry.best_y,
+                        score: (entry.score * 1000.0) as i32,
+                    })
+                } else {
+                    // 不合法 → 改用即時 AI
+                    ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr],
+                        game.players.len())
+                }
+            } else {
+                // 開局書回傳的棋子已被使用，改用即時 AI
+                ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr],
+                    game.players.len())
+            }
+        } else {
+            ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr],
+                game.players.len())
+        };
         ai_timer.computed_move = mv;
     }
 

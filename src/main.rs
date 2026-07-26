@@ -5,7 +5,10 @@ use bevy::render::RenderPlugin;
 use bevy::ui::picking_backend::UiPickingCamera;
 use bevy::window::WindowResolution;
 
-use diagonal_war::state::{handle_ai_turn, AiTimer, GameConfig, GameResource};
+use diagonal_war::ai::opening_book::OpeningBook;
+use diagonal_war::ai::train::train_depth_3;
+use diagonal_war::game::piece_library;
+use diagonal_war::state::{handle_ai_turn, AiTimer, GameConfig, GameResource, OpeningBookResource};
 use diagonal_war::ui::board::BoardPlugin;
 use diagonal_war::ui::hud::HudPlugin;
 use diagonal_war::ui::menu::MenuPlugin;
@@ -13,6 +16,9 @@ use diagonal_war::ui::panel::PanelPlugin;
 use diagonal_war::ui::styles::{WINDOW_HEIGHT, WINDOW_WIDTH};
 
 fn main() {
+    // 啟動時載入或訓練開局書
+    let opening_book = load_or_train_book();
+
     App::new()
         .add_plugins(
             DefaultPlugins
@@ -40,6 +46,7 @@ fn main() {
         .insert_resource(GameResource::new(&GameConfig::default()))
         .insert_resource(GameConfig::default())
         .insert_resource(AiTimer::default())
+        .insert_resource(OpeningBookResource { book: opening_book })
         .add_plugins((BoardPlugin, PanelPlugin, HudPlugin, MenuPlugin))
         .add_systems(Startup, setup_camera)
         .add_systems(Update, handle_ai_turn)
@@ -48,4 +55,29 @@ fn main() {
 
 fn setup_camera(mut commands: Commands) {
     commands.spawn((Camera2d, UiPickingCamera));
+}
+
+/// 嘗試載入開局書，不存在則訓練
+fn load_or_train_book() -> OpeningBook {
+    let path = "assets/opening_book.json";
+
+    // 嘗試載入
+    if let Ok(book) = OpeningBook::load(path) {
+        println!("[OpeningBook] 已載入 {} 個 entry（{}）", book.len(), path);
+        return book;
+    }
+
+    println!("[OpeningBook] 未找到已訓練的開局書，開始訓練...");
+
+    let pieces = piece_library::create_all_pieces();
+    match train_depth_3(&pieces, path) {
+        Ok(book) => {
+            println!("[OpeningBook] 訓練完成：{} 個 entry", book.len());
+            book
+        }
+        Err(e) => {
+            eprintln!("[OpeningBook] 訓練失敗：{}，使用空白開局書", e);
+            OpeningBook::new()
+        }
+    }
 }

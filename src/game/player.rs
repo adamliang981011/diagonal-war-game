@@ -59,7 +59,7 @@ mod tests {
     fn test_new_player_has_all_pieces() {
         let pieces = create_all_pieces();
         let player = Player::new(PlayerId(0), &pieces);
-        assert_eq!(player.remaining_pieces.len(), 21);
+        assert_eq!(player.remaining_pieces.len(), 26);
         assert!(!player.has_placed_first_piece);
         assert!(!player.passed);
         assert_eq!(player.elimination_turn, None);
@@ -71,14 +71,14 @@ mod tests {
         let mut player = Player::new(PlayerId(0), &pieces);
         let monomino_id = pieces[0].id;
         player.remove_piece(monomino_id);
-        assert_eq!(player.remaining_pieces.len(), 20);
+        assert_eq!(player.remaining_pieces.len(), 25);
     }
 
     #[test]
     fn test_remaining_squares() {
         let pieces = create_all_pieces();
         let player = Player::new(PlayerId(0), &pieces);
-        assert_eq!(player.remaining_squares(), 89);
+        assert_eq!(player.remaining_squares(), 119);
     }
 
     #[test]
