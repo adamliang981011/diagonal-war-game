@@ -17,7 +17,7 @@ import torch
 from torch.utils.data import Dataset
 
 # Action encoding constants
-MAX_PIECES = 22
+MAX_PIECES = 26
 MAX_VARIANTS = 8
 BOARD_SIZE = 20
 MAX_ACTIONS = MAX_PIECES * MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE  # 70,400

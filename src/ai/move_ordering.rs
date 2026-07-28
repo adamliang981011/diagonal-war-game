@@ -45,7 +45,7 @@ pub fn piece_value_table(progress: f32, cells: &[(i32, i32)]) -> f32 {
 }
 
 /// Action encoding constants (must match python/dataset_loader.py)
-pub const MAX_PIECES: usize = 22;
+pub const MAX_PIECES: usize = 26;
 pub const MAX_VARIANTS: usize = 8;
 pub const BOARD_SIZE: usize = 20;
 pub const MAX_ACTIONS: usize = MAX_PIECES * MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE;
