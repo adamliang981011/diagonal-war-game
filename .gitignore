@@ -2,3 +2,14 @@
 set RUST_BACKTRACE=1 && cargo run result.txt
 nul
 target/
+
+# Generated data
+training_data/
+model/
+*.onnx
+*.pt
+*.bin
+
+# Python cache
+python/__pycache__/
+*.pyc

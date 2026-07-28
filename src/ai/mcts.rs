@@ -16,7 +16,6 @@ use crate::game::player::PlayerId;
 const PUCT_C: f32 = 1.25;
 const VIRTUAL_LOSS: f32 = 0.05;
 const MAX_TT_SIZE: usize = 50_000;
-const PARALLEL_THREADS: usize = 4;
 
 const DIAGONAL_DIRS: [(i32, i32); 4] = [
     (1,1),(1,-1),(-1,1),(-1,-1),
@@ -423,11 +422,12 @@ pub fn choose_move<const N: usize>(
     move_ordering::order_moves(&mut candidates, board, player, remaining_pieces, occupied, 119.0);
 
     let all_players: Vec<PlayerId> = (0..player_count).map(PlayerId).collect();
-    let per_thread = iterations / PARALLEL_THREADS;
+    let n_threads = config.parallel_threads.max(1);
+    let per_thread = iterations / n_threads;
 
     let tree_results: Vec<Tree> = std::thread::scope(|s| {
         let mut handles = Vec::new();
-        for _ in 0..PARALLEL_THREADS {
+        for _ in 0..n_threads {
             let board_c = board.clone();
             let remaining_c = remaining_pieces.to_vec();
             let all_players_c = all_players.clone();
@@ -478,7 +478,7 @@ pub fn choose_move<const N: usize>(
     if config.print_profile {
         let total_visits: u32 = merged.nodes[0].children.iter().map(|c| c.visits).sum();
         eprintln!("\nAI Turn Profile (pid={}, {} iters, {} players):", player.0, config.iterations, player_count);
-        eprintln!("  Candidate checks: {} total, best visits={}  total_visits={}", candidates.len(), total_visits, iterations * PARALLEL_THREADS);
+        eprintln!("  Candidate checks: {} total, best visits={}  total_visits={}", candidates.len(), total_visits, iterations);
         eprintln!("Root candidates (Top 10):");
         let mut children: Vec<_> = merged.nodes[0].children.iter().enumerate().collect();
         children.sort_by(|(_, a), (_, b)| b.visits.cmp(&a.visits));
