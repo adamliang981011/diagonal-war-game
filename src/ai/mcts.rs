@@ -1,5 +1,4 @@
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Mutex;
 
 use rand::seq::SliceRandom;
 
@@ -248,29 +247,13 @@ fn build_piece_order(all_pieces: &[PieceShape]) -> Vec<usize> {
     order
 }
 
-/// 跨回合樹復用
-static PREV_TREE: Mutex<Option<Tree>> = Mutex::new(None);
-
-/// 儲存樹供下一回合復用
-pub(crate) fn save_tree(tree: Tree) {
-    if let Ok(mut guard) = PREV_TREE.lock() {
-        *guard = Some(tree);
-    }
-}
-
-/// 取出前一回合的樹
-#[allow(dead_code)]
-pub(crate) fn take_prev_tree() -> Option<Tree> {
-    PREV_TREE.lock().ok().and_then(|mut guard| guard.take())
-}
-
 impl Tree {
     /// 依據實際落子，將 root 推進到對應子節點（保留 subtree）
     #[allow(dead_code)]
-    pub(crate) fn advance_root(&mut self, piece: usize, variant: usize, x: i32, y: i32) -> bool {
+    pub(crate)     fn advance_root(&mut self, mv: &crate::ai::AiMove) -> bool {
         if self.nodes.is_empty() { return false; }
         let child_idx = self.nodes[0].children.iter()
-            .position(|c| c.piece_index == piece && c.variant_index == variant && c.x == x && c.y == y);
+            .position(|c| c.piece_index == mv.piece_index && c.variant_index == mv.variant_index && c.x == mv.x && c.y == mv.y);
         match child_idx {
             Some(idx) => {
                 let child = &self.nodes[0].children[idx];
@@ -337,7 +320,11 @@ fn start_ponder<const N: usize>(
         for child in children.iter().take(5) {
             if PONDER_STOP.load(Ordering::SeqCst) { break; }
             let mut sub_tree = tree.clone();
-            if !sub_tree.advance_root(child.piece_index, child.variant_index, child.x, child.y) {
+            let child_mv = crate::ai::AiMove {
+                piece_index: child.piece_index, variant_index: child.variant_index,
+                x: child.x, y: child.y, score: 0,
+            };
+            if !sub_tree.advance_root(&child_mv) {
                 continue;
             }
             // 從對手視角執行簡短 MCTS
@@ -386,9 +373,6 @@ fn start_ponder<const N: usize>(
                 }
             }
         }
-        if !PONDER_STOP.load(Ordering::SeqCst) && !ponder_tree.nodes[0].children.is_empty() {
-            save_tree(ponder_tree);
-        }
         PONDER_ACTIVE.store(false, Ordering::SeqCst);
     });
 }
@@ -411,6 +395,7 @@ pub fn choose_move<const N: usize>(
     config: &crate::ai::config::MctsConfig,
     player_count: usize,
     _stats: &mut Option<crate::ai::MctsOutput>,
+    search_state: &mut Option<crate::ai::SearchState>,
 ) -> Option<AiMove> {
     crate::ai::value::clear_nn_cache();
     stop_ponder();
@@ -489,9 +474,13 @@ pub fn choose_move<const N: usize>(
         crate::ai::value::print_cache_stats();
     }
 
-    // 啟動背景搜尋 + 儲存樹供下一回合復用
+    // 啟動背景搜尋
     start_ponder(board, player, remaining_pieces, &all_players, &merged, iterations);
-    save_tree(merged);
+
+    // 儲存樹供下一回合 Tree Reuse
+    if let Some(state) = search_state {
+        state.tree = Some(Box::new(merged));
+    }
 
     best
 }

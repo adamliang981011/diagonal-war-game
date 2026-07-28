@@ -43,7 +43,7 @@ fn main() {
         let result = diagonal_war::ai::mcts::choose_move::<20>(
             &board, player, &all_pieces, false,
             starting_corner_for_player(player.0, 2),
-            &cfg, 2, &mut None,
+            &cfg, 2, &mut None, &mut None,
         );
         let elapsed = start.elapsed();
 

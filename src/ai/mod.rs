@@ -19,6 +19,11 @@ use crate::game::board::{Board, Corner};
 use crate::game::piece::PieceShape;
 use crate::game::player::PlayerId;
 
+/// Tree Reuse 的跨回合搜尋狀態
+pub struct SearchState {
+    pub(crate) tree: Option<Box<crate::ai::mcts::Tree>>,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum AiDifficulty {
     Random,
@@ -108,25 +113,17 @@ pub fn choose_move_with_stats<const N: usize>(
 ) -> Option<(AiMove, MctsOutput)> {
     match difficulty {
         AiDifficulty::Mcts { iterations } => {
-            let mut cfg = crate::ai::config::self_play_config();
+            let mut cfg = crate::ai::config::official_config();
             cfg.iterations = iterations;
             let mut stats = None;
-            let mv = mcts::choose_move(board, player, remaining_pieces, is_first_move, starting_corner, &cfg, player_count, &mut stats);
+            let mv = mcts::choose_move(board, player, remaining_pieces, is_first_move, starting_corner, &cfg, player_count, &mut stats, &mut None);
             mv.map(|m| (m, stats.unwrap()))
         },
-        _ => {
-            // 非 MCTS 模式不回傳 stats
-            choose_move(board, player, remaining_pieces, is_first_move, starting_corner, difficulty, player_count)
-                .map(|m| {
-                    let out = MctsOutput {
-                        best: m.clone(),
-                        visits: vec![],
-                        total_visits: 0,
-                        value: 0.5,
-                    };
-                    (m, out)
-                })
-        },
+        _ => choose_move(board, player, remaining_pieces, is_first_move, starting_corner, difficulty, player_count)
+            .map(|m| {
+                let out = MctsOutput { best: m.clone(), visits: vec![], total_visits: 0, value: 0.5 };
+                (m, out)
+            }),
     }
 }
 
@@ -158,7 +155,7 @@ pub fn choose_move<const N: usize>(
         AiDifficulty::Mcts { iterations } => {
             let mut cfg = crate::ai::config::official_config();
             cfg.iterations = iterations;
-            mcts::choose_move(board, player, remaining_pieces, is_first_move, starting_corner, &cfg, player_count, &mut None)
+            mcts::choose_move(board, player, remaining_pieces, is_first_move, starting_corner, &cfg, player_count, &mut None, &mut None)
         },
     }
 }

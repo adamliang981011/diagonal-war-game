@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 use crate::ai::opening_book::OpeningBook;
-use crate::ai::{AiDifficulty, AiMove, choose_move as ai_choose};
+use crate::ai::{AiDifficulty, AiMove, SearchState, choose_move as ai_choose};
 use crate::game::board::Board;
 use crate::game::piece_library;
 use crate::game::player::{starting_corner_for_player, Player, PlayerId};
@@ -76,6 +76,11 @@ impl Default for AiTimer {
 #[derive(Resource)]
 pub struct OpeningBookResource {
     pub book: OpeningBook,
+}
+
+#[derive(Resource)]
+pub struct SearchResource {
+    pub state: Option<SearchState>,
 }
 
 impl Default for OpeningBookResource {
@@ -183,6 +188,7 @@ pub fn handle_ai_turn(
     mut ai_timer: ResMut<AiTimer>,
     time: Res<Time>,
     book: Res<OpeningBookResource>,
+    mut search: ResMut<SearchResource>,
 ) {
     if game.phase != GamePhase::Selecting {
         ai_timer.active = false;
@@ -246,9 +252,21 @@ pub fn handle_ai_turn(
             game.board.place_piece(&variant, mv.x, mv.y, pid);
 
             game.current_player_mut().remove_piece(shape_id);
+            // 更新 Tree Reuse（advance_root 到這一步的 subtree）
+            if let Some(ref mut st) = search.state {
+                if let Some(ref mut tree) = st.tree {
+                    if !tree.advance_root(&mv) {
+                        st.tree = None;
+                    }
+                }
+            }
         game.current_player_mut().has_placed_first_piece = true;
         game.advance_turn();
     } else {
+        // 玩家無合法步，捨棄既有搜尋樹
+        if let Some(ref mut st) = search.state {
+            st.tree = None;
+        }
         game.eliminate_current_player();
         if game.active_player_count() <= 1 {
             game.phase = GamePhase::GameOver;
