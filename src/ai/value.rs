@@ -168,6 +168,49 @@ impl ValueNetwork {
         let neural = self.evaluate(board, player, player_count);
         neural * blend + heuristic_val * (1.0 - blend)
     }
+
+    /// 評估盤面 Value + Policy（雙頭網路）
+    ///
+    /// ONNX 輸出順序：output[0]=value, output[1]=policy
+    /// 若模型只有 value（舊版），policy 回傳空 Vec
+    pub fn evaluate_policy<const N: usize>(
+        &self, board: &Board<N>, player: usize, player_count: usize,
+    ) -> (f32, Vec<f32>) {
+        let Some(model) = self.model.clone() else { return (0.5, vec![]) };
+        let input = Self::board_to_input(board, player);
+        let board_tensor = tract_ndarray::Array4::from_shape_vec(
+            (1, 1, 20, 20), input.to_vec(),
+        ).unwrap();
+        let pc_idx = (player_count.saturating_sub(2).min(2)) as i64;
+        let pc_tensor = tract_ndarray::Array1::from_vec(vec![pc_idx]);
+        let result = model.run(tvec!(
+            board_tensor.into_tensor().into(),
+            pc_tensor.into_tensor().into(),
+        ));
+        match result {
+            Ok(outputs) => {
+                // output[0] = value
+                let value = match outputs[0].clone().into_tensor().to_plain_array_view::<f32>() {
+                    Ok(v) => v.as_slice().unwrap_or(&[0.5])[0].clamp(0.0, 1.0),
+                    Err(_) => 0.5,
+                };
+                // output[1] = policy（若存在）
+                let policy = if outputs.len() > 1 {
+                    match outputs[1].clone().into_tensor().to_plain_array_view::<f32>() {
+                        Ok(v) => v.as_slice().unwrap_or(&[]).to_vec(),
+                        Err(_) => vec![],
+                    }
+                } else {
+                    vec![]
+                };
+                (value, policy)
+            }
+            Err(e) => {
+                eprintln!("ValueNetwork evaluate_policy error: {e}");
+                (0.5, vec![])
+            }
+        }
+    }
 }
 
 #[cfg(test)]

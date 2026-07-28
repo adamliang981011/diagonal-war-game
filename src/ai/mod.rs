@@ -21,7 +21,9 @@ use crate::game::player::PlayerId;
 
 /// Tree Reuse 的跨回合搜尋狀態
 pub struct SearchState {
-    pub(crate) tree: Option<Box<crate::ai::mcts::Tree>>,
+    pub tree: Option<Box<crate::ai::mcts::Tree>>,
+    /// Neural policy vector (70400), 每次 choose_move 開頭推論一次後查表使用
+    pub policy: Vec<f32>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]

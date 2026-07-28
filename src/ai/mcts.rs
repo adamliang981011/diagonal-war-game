@@ -34,30 +34,30 @@ fn max_children(visits: u32) -> usize {
 // ============================================================
 
 #[derive(Clone)]
-pub(crate) struct Edge {
-    pub(crate) piece_index: usize,
-    pub(crate) variant_index: usize,
-    pub(crate) x: i32,
-    pub(crate) y: i32,
-    pub(crate) child_idx: usize,
-    pub(crate) visits: u32,
-    pub(crate) total_score: f32,
-    pub(crate) prior: f32,
-    pub(crate) virtual_loss: f32,
+pub struct Edge {
+    pub piece_index: usize,
+    pub variant_index: usize,
+    pub x: i32,
+    pub y: i32,
+    pub child_idx: usize,
+    pub visits: u32,
+    pub total_score: f32,
+    pub prior: f32,
+    pub virtual_loss: f32,
 }
 
 #[derive(Clone)]
-pub(crate) struct TreeNode {
-    pub(crate) visits: u32,
-    pub(crate) total_score: f32,
-    pub(crate) children: Vec<Edge>,
-    pub(crate) unexpanded: Vec<(usize, usize, i32, i32)>,
-    pub(crate) nn_value: f32, // -1.0 = 未計算
+pub struct TreeNode {
+    pub visits: u32,
+    pub total_score: f32,
+    pub children: Vec<Edge>,
+    pub unexpanded: Vec<(usize, usize, i32, i32)>,
+    pub nn_value: f32, // -1.0 = 未計算
 }
 
 #[derive(Clone)]
-pub(crate) struct Tree {
-    pub(crate) nodes: Vec<TreeNode>,
+pub struct Tree {
+    pub nodes: Vec<TreeNode>,
 }
 
 impl Tree {
@@ -346,7 +346,7 @@ fn start_ponder<const N: usize>(
                     let apc = all_players_c.clone();
                     let cc = cand.clone();
                     s.spawn(move || {
-                        let _t = run_mcts::<N>(&bc, next_player, &rc, &apc, &cc, per_thread);
+                        let _t = run_mcts::<N>(&bc, next_player, &rc, &apc, &cc, per_thread, &[]);
                     });
                 }
             });
@@ -410,6 +410,20 @@ pub fn choose_move<const N: usize>(
     let n_threads = config.parallel_threads.max(1);
     let per_thread = iterations / n_threads;
 
+    // 以 Neural Network 推論 policy（一次，供所有 thread 查表）
+    let vn = crate::ai::value::get_value_network();
+    if vn.is_loaded() {
+        let (_, policy) = vn.evaluate_policy(board, player.0 as usize, player_count);
+        if let Some(state) = search_state {
+            state.policy = policy;
+        }
+    }
+
+    // 取得 policy vector（在 scope 外捕捉，避免借用衝突）
+    let policy_vec: Vec<f32> = search_state.as_ref()
+        .map(|s| s.policy.clone())
+        .unwrap_or_default();
+
     let tree_results: Vec<Tree> = std::thread::scope(|s| {
         let mut handles = Vec::new();
         for _ in 0..n_threads {
@@ -417,8 +431,9 @@ pub fn choose_move<const N: usize>(
             let remaining_c = remaining_pieces.to_vec();
             let all_players_c = all_players.clone();
             let candidates_c = candidates.clone();
+            let policy_c = policy_vec.clone();
             handles.push(s.spawn(move || {
-                run_mcts::<N>(&board_c, player, &remaining_c, &all_players_c, &candidates_c, per_thread)
+                run_mcts::<N>(&board_c, player, &remaining_c, &all_players_c, &candidates_c, per_thread, &policy_c)
             }));
         }
         handles.into_iter().map(|h| h.join().unwrap()).collect::<Vec<_>>()
@@ -496,6 +511,7 @@ fn run_mcts<const N: usize>(
     all_players: &[PlayerId],
     candidates: &[(usize, usize, i32, i32, i32)],
     iterations: usize,
+    policy: &[f32],
 ) -> Tree {
     let mut tree = Tree::new();
     let mut tt = TranspositionTable::new(MAX_TT_SIZE);
@@ -575,10 +591,18 @@ fn run_mcts<const N: usize>(
                     .collect();
                 let sum: f32 = shifted.iter().sum();
 
-                // Pop 並使用正規化後的 prior
+                // Pop 並使用正規化後的 prior（混合 neural policy）
                 if let Some((pi, vi, x, y)) = node.unexpanded.pop() {
                     let idx = node.unexpanded.len(); // 已被 pop，長度即此項原 index
-                    let prior = if sum > 0.0 { shifted[idx] / sum } else { 1.0 };
+                    let mut prior = if sum > 0.0 { shifted[idx] / sum } else { 1.0 };
+                    // Neural policy blend（若 policy vector 存在）
+                    if !policy.is_empty() {
+                        let aid = crate::ai::move_ordering::action_id(pi, vi, x, y);
+                        if aid < policy.len() {
+                            const POLICY_BLEND: f32 = 0.5;
+                            prior = prior * (1.0 - POLICY_BLEND) + policy[aid] * POLICY_BLEND;
+                        }
+                    }
                     let variant = &remaining_pieces[pi].variants[vi];
                     let c = tree.add_child(node_idx, pi, vi, x, y, prior);
                     sim_board.place_piece(variant, x, y, sim_player);

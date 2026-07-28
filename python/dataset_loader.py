@@ -5,15 +5,29 @@ Diagonal War — 訓練資料載入器
 轉為 PyTorch Dataset。
 
 Usage:
-    from dataset_loader import TrainingDataset
-    ds = TrainingDataset(["games_001.bin", "games_002.bin"])
-    board, value = ds[0]  # board: (1, 20, 20), value: float
+    from dataset_loader import TrainingDataset, PolicyDataset
+    ds = TrainingDataset(["games_001.bin"])
+    ds2 = PolicyDataset(["games_001.bin"])       # 含 policy target
+    board, value, pc_idx, policy_indices, policy_probs = ds2[0]
 """
 
 import struct
 import numpy as np
 import torch
 from torch.utils.data import Dataset
+
+# Action encoding constants
+MAX_PIECES = 22
+MAX_VARIANTS = 8
+BOARD_SIZE = 20
+MAX_ACTIONS = MAX_PIECES * MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE  # 70,400
+
+
+def encode_action(piece: int, variant: int, x: int, y: int) -> int:
+    return (piece * MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE
+            + variant * BOARD_SIZE * BOARD_SIZE
+            + y * BOARD_SIZE
+            + x)
 
 
 def parse_bincode_games(filepath: str) -> list[dict]:
@@ -199,6 +213,76 @@ class TrainingDataset(Dataset):
 
     def _augment(self, board: np.ndarray) -> np.ndarray:
         """資料增強：翻轉 + 旋轉"""
+        k = np.random.randint(0, 4)
+        board = np.rot90(board, k=k)
+        if np.random.rand() > 0.5:
+            board = np.fliplr(board)
+        return board
+
+
+class PolicyDataset(Dataset):
+    """
+    PyTorch Dataset for Dual (Policy + Value) Network training.
+
+    Returns (board, value, pc_idx, policy_indices, policy_probs).
+    Policy targets are sparse (indices + probabilities) to avoid 70K dense vector.
+    """
+
+    def __init__(self, filepaths: list[str], augment: bool = True, target: str = "mcts"):
+        self.boards = []
+        self.values = []
+        self.pc_indices = []
+        self.policy_indices = []  # list of np.array per sample
+        self.policy_probs = []    # list of np.array per sample
+        self.augment = augment
+
+        for fp in filepaths:
+            games = parse_bincode_games(fp)
+            for game in games:
+                for step in game["steps"]:
+                    self.boards.append(step["board"])
+                    if target == "mcts":
+                        self.values.append(step.get("mcts_value", 0.5))
+                    else:
+                        self.values.append(compute_value(step))
+                    pc = step.get("player_count", 2)
+                    self.pc_indices.append(max(0, min(pc - 2, 2)))
+                    # Sparse policy target: (indices, probs) from root_visits
+                    visits = step.get("root_visits", [])
+                    if visits:
+                        idx_arr = np.array([encode_action(r["piece"], r["variant"], r["x"], r["y"]) for r in visits], dtype=np.int64)
+                        prob_arr = np.array([r["probability"] for r in visits], dtype=np.float32)
+                    else:
+                        idx_arr = np.zeros(0, dtype=np.int64)
+                        prob_arr = np.zeros(0, dtype=np.float32)
+                    self.policy_indices.append(idx_arr)
+                    self.policy_probs.append(prob_arr)
+
+        self.boards = np.stack(self.boards, axis=0).astype(np.float32)
+        self.values = np.array(self.values, dtype=np.float32)
+        self.pc_indices = np.array(self.pc_indices, dtype=np.int64)
+
+    def __len__(self):
+        return len(self.boards)
+
+    def __getitem__(self, idx: int) -> tuple:
+        board = self.boards[idx]
+        value = self.values[idx]
+        pc_idx = self.pc_indices[idx]
+        pol_idx = self.policy_indices[idx]
+        pol_prob = self.policy_probs[idx]
+
+        if self.augment:
+            board = self._augment(board)
+
+        board_t = torch.from_numpy(board.copy()).unsqueeze(0)
+        value_t = torch.tensor(value, dtype=torch.float32)
+        pc_idx_t = torch.tensor(pc_idx, dtype=torch.long)
+        pol_idx_t = torch.from_numpy(pol_idx.copy())
+        pol_prob_t = torch.from_numpy(pol_prob.copy())
+        return board_t, value_t, pc_idx_t, pol_idx_t, pol_prob_t
+
+    def _augment(self, board: np.ndarray) -> np.ndarray:
         k = np.random.randint(0, 4)
         board = np.rot90(board, k=k)
         if np.random.rand() > 0.5:

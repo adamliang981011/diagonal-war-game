@@ -44,6 +44,20 @@ pub fn piece_value_table(progress: f32, cells: &[(i32, i32)]) -> f32 {
     base * (1.0 - decay) + (base * 0.3 + shape_bonus * 0.5) * decay
 }
 
+/// Action encoding constants (must match python/dataset_loader.py)
+pub const MAX_PIECES: usize = 22;
+pub const MAX_VARIANTS: usize = 8;
+pub const BOARD_SIZE: usize = 20;
+pub const MAX_ACTIONS: usize = MAX_PIECES * MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE;
+
+/// 將 (piece, variant, x, y) 編碼為 action_id (0..70400)
+pub fn action_id(pi: usize, vi: usize, x: i32, y: i32) -> usize {
+    pi * MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE
+        + vi * BOARD_SIZE * BOARD_SIZE
+        + (y as usize) * BOARD_SIZE
+        + (x as usize)
+}
+
 /// 計算先驗機率 prior（固定公式，獨立於 score_move）
 pub fn compute_prior<const N: usize>(
     board: &Board<N>,

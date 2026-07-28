@@ -9,6 +9,7 @@ use diagonal_war::ai::opening_book::OpeningBook;
 use diagonal_war::ai::train::train_depth_3;
 use diagonal_war::game::piece_library;
 use diagonal_war::state::{handle_ai_turn, AiTimer, GameConfig, GameResource, OpeningBookResource, SearchResource};
+use diagonal_war::ai::SearchState;
 use diagonal_war::ui::board::BoardPlugin;
 use diagonal_war::ui::hud::HudPlugin;
 use diagonal_war::ui::menu::MenuPlugin;
@@ -47,7 +48,7 @@ fn main() {
         .insert_resource(GameConfig::default())
         .insert_resource(AiTimer::default())
         .insert_resource(OpeningBookResource { book: opening_book })
-        .insert_resource(SearchResource { state: None })
+        .insert_resource(SearchResource { state: Some(SearchState { tree: None, policy: vec![] }) })
         .add_plugins((BoardPlugin, PanelPlugin, HudPlugin, MenuPlugin))
         .add_systems(Startup, setup_camera)
         .add_systems(Update, handle_ai_turn)
