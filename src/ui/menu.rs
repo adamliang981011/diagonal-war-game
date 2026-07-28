@@ -2,7 +2,7 @@ use bevy::picking::Pickable;
 use bevy::prelude::*;
 
 use crate::ai::AiDifficulty;
-use crate::state::{GameConfig, GamePhase, GameResource};
+use crate::state::{BoardType, GameConfig, GamePhase, GameResource};
 use crate::ui::panel::PiecePreviewRoot;
 use crate::ui::styles::*;
 
@@ -12,6 +12,11 @@ pub struct MenuRoot;
 #[derive(Component)]
 pub struct PlayerCountButton {
     pub count: usize,
+}
+
+#[derive(Component)]
+pub struct BoardTypeButton {
+    pub board_type: BoardType,
 }
 
 #[derive(Component)]
@@ -57,7 +62,7 @@ fn show_menu_screen(
 ) {
     if game.phase != GamePhase::Menu {
         for entity in &existing {
-            commands.entity(entity).despawn();
+            if let Ok(mut ec) = commands.get_entity(entity) { ec.despawn(); }
         }
         return;
     }
@@ -88,6 +93,51 @@ fn show_menu_screen(
                 TextColor(Color::srgb(0.8, 0.8, 1.0)),
                 TextLayout { justify: Justify::Center, ..default() },
             ));
+
+            parent.spawn((Node { height: Val::Px(20.0), ..default() }, MenuRoot));
+
+            parent.spawn((
+                Text::new("棋盤類型"),
+                TextFont { font: FontSource::Handle(f.clone()), font_size: FontSize::Px(24.0), ..default() },
+                TextColor(Color::WHITE),
+                TextLayout { justify: Justify::Center, ..default() },
+            ));
+
+            parent.spawn((Node { height: Val::Px(12.0), ..default() }, MenuRoot));
+
+            let types = [(BoardType::Square, "方板 20×20")];
+            parent
+                .spawn((Node {
+                    flex_direction: FlexDirection::Row,
+                    column_gap: Val::Px(12.0),
+                    ..default()
+                },))
+                .with_children(|row| {
+                    for &(bt, label) in &types {
+                        row.spawn((
+                            Button,
+                            Pickable::default(),
+                            Interaction::default(),
+                            Node {
+                                width: Val::Px(140.0),
+                                height: Val::Px(40.0),
+                                justify_content: JustifyContent::Center,
+                                align_items: AlignItems::Center,
+                                ..default()
+                            },
+                            BackgroundColor(Color::srgb(0.3, 0.3, 0.3)),
+                            BoardTypeButton { board_type: bt },
+                        ))
+                        .with_children(|btn| {
+                            btn.spawn((
+                                Text::new(label),
+                                TextFont { font: FontSource::Handle(f.clone()), font_size: FontSize::Px(16.0), ..default() },
+                                TextColor(Color::WHITE),
+                                TextLayout { justify: Justify::Center, ..default() },
+                            ));
+                        });
+                    }
+                });
 
             parent.spawn((Node { height: Val::Px(20.0), ..default() }, MenuRoot));
 
@@ -244,6 +294,7 @@ fn handle_menu_clicks(
     mut game: ResMut<GameResource>,
     mut config: ResMut<GameConfig>,
     interaction_query: Query<(&Interaction, &PlayerCountButton), Changed<Interaction>>,
+    board_type_query: Query<(&Interaction, &BoardTypeButton), Changed<Interaction>>,
     toggle_query: Query<(&Interaction, &AiToggleButton), Changed<Interaction>>,
     start_query: Query<(&Interaction, &StartGameButton), Changed<Interaction>>,
     mut text_query: Query<&mut Text>,
@@ -264,6 +315,12 @@ fn handle_menu_clicks(
                     Visibility::Hidden
                 };
             }
+        }
+    }
+
+    for (interaction, btn) in &board_type_query {
+        if *interaction == Interaction::Pressed {
+            config.board_type = btn.board_type;
         }
     }
 

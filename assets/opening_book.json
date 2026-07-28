@@ -1,0 +1,3372 @@
+{
+  "entries": {
+    "17245252282473135482": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9624519306526743473": {
+      "visits": 10,
+      "score": 0.3661566,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4541820209297129429": {
+      "visits": 10,
+      "score": 0.3671438,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18445240349970685605": {
+      "visits": 10,
+      "score": 0.35583732,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8073800002793181159": {
+      "visits": 10,
+      "score": 0.36014274,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4630825210841182907": {
+      "visits": 10,
+      "score": 0.3718846,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16853817526609821003": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2317146214428947441": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8075763209418375566": {
+      "visits": 10,
+      "score": 0.35796416,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13549018346199437153": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15516589790738400191": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7321914093423570237": {
+      "visits": 10,
+      "score": 0.3661566,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3339021359281477687": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5069118126034681117": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18380961871039280286": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "196411726222207394": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "16910654561026541966": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4672008713122508270": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7587669364375575547": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18364788054941688662": {
+      "visits": 10,
+      "score": 0.35583732,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6508221537427949058": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5941652542592091870": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8066480141902776942": {
+      "visits": 10,
+      "score": 0.36602393,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15567383416878773980": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 1,
+      "best_x": 0,
+      "best_y": 0
+    },
+    "3363940192205599212": {
+      "visits": 10,
+      "score": 0.36472726,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "691049362178106454": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11406485326471503442": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8076253299270381258": {
+      "visits": 10,
+      "score": 0.35463545,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8209525481917362406": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16538646667872662502": {
+      "visits": 10,
+      "score": 0.37556243,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12421464072117256717": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "238602587252383321": {
+      "visits": 10,
+      "score": 0.36829457,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8409118667183433281": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12340529620688186160": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1556870853450208005": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7012107279498583820": {
+      "visits": 10,
+      "score": 0.3707225,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14021775413631077145": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9781338783473457137": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13013651739085285490": {
+      "visits": 10,
+      "score": 0.3718846,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1133240192126264128": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10979590262140650360": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13748362922790936008": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18414945770863383958": {
+      "visits": 10,
+      "score": 0.35235417,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12724634157511395193": {
+      "visits": 10,
+      "score": 0.3730239,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11431356029081257127": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15582648770425143740": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "147167713168171719": {
+      "visits": 10,
+      "score": 0.35583732,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11860446037607318578": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15233021385549133743": {
+      "visits": 10,
+      "score": 0.36585775,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4845556609833296519": {
+      "visits": 10,
+      "score": 0.3660002,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15349088468010476763": {
+      "visits": 10,
+      "score": 0.35796416,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3889080211293086336": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7512378889190132763": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10574075557319727160": {
+      "visits": 10,
+      "score": 0.35583735,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5668392188645693469": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "455314748472853231": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2669156356582705427": {
+      "visits": 10,
+      "score": 0.37072605,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13561555539141959389": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "13777357105296793265": {
+      "visits": 10,
+      "score": 0.37204236,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9849103240550445914": {
+      "visits": 10,
+      "score": 0.35339966,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "719456112111912530": {
+      "visits": 10,
+      "score": 0.3523542,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6670244533171238704": {
+      "visits": 10,
+      "score": 0.37302387,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8203503514427863762": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13788042969722202810": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2843715324262782594": {
+      "visits": 10,
+      "score": 0.36030623,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15045487670776872915": {
+      "visits": 10,
+      "score": 0.36374983,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10155739204444573340": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2180372216975482074": {
+      "visits": 10,
+      "score": 0.36715293,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11153355561968748464": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16320484757803796696": {
+      "visits": 10,
+      "score": 0.35583735,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9714725013921413520": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12218103670770312334": {
+      "visits": 10,
+      "score": 0.37318438,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14305689728384824611": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6954365002820103723": {
+      "visits": 10,
+      "score": 0.36842543,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17177980256781330183": {
+      "visits": 10,
+      "score": 0.35796413,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8918563217330662294": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "654368061358257253": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6691359445730898659": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9905223194409937187": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3248711560887330472": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "15662487170625889792": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6335457039077238722": {
+      "visits": 10,
+      "score": 0.35704187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16248587214186839016": {
+      "visits": 10,
+      "score": 0.36727867,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8765788967425279626": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1996536260637701441": {
+      "visits": 10,
+      "score": 0.36826786,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8558256505584424056": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8983754464739147810": {
+      "visits": 10,
+      "score": 0.3661566,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7577605238584918323": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1145831007182460352": {
+      "visits": 10,
+      "score": 0.37072605,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1120095497200391215": {
+      "visits": 10,
+      "score": 0.3625086,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14713630655891265389": {
+      "visits": 10,
+      "score": 0.37318435,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8825974347936449661": {
+      "visits": 10,
+      "score": 0.36842543,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6547880776960245056": {
+      "visits": 10,
+      "score": 0.3556621,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16885858980252115139": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9615774021834426217": {
+      "visits": 10,
+      "score": 0.37305397,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4861160972981776814": {
+      "visits": 10,
+      "score": 0.35796413,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9048541075761161758": {
+      "visits": 10,
+      "score": 0.3682679,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12440404605022106544": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9240714343035690177": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9685470475513725320": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13852395240236297847": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10692315811086209552": {
+      "visits": 10,
+      "score": 0.3730239,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "715895900848987110": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15743403064976857640": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6429233956309654958": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9976462577956146873": {
+      "visits": 10,
+      "score": 0.3718846,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5363533275100343069": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "16929195467829028322": {
+      "visits": 10,
+      "score": 0.3718846,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7505880190717876063": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "645600297208072522": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7366859920964709586": {
+      "visits": 10,
+      "score": 0.36585775,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7142977938076180051": {
+      "visits": 10,
+      "score": 0.37318438,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7531627568784022731": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13103469403466697445": {
+      "visits": 10,
+      "score": 0.35583735,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17231588062394040071": {
+      "visits": 10,
+      "score": 0.3523542,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2553906547954918099": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14502323767102684537": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14884981067401317647": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16536537742819580290": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2995249853017782520": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16713617112899686940": {
+      "visits": 10,
+      "score": 0.3636095,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3683942952903119225": {
+      "visits": 10,
+      "score": 0.35009187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12141344055142701544": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14404433198923192423": {
+      "visits": 10,
+      "score": 0.3601427,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18055699907348759255": {
+      "visits": 10,
+      "score": 0.36250862,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3572821368732123066": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12970909419434311408": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10902702002879398064": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4277265953548049465": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2665255990394878752": {
+      "visits": 10,
+      "score": 0.3660002,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3951700094062146490": {
+      "visits": 10,
+      "score": 0.36842543,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6584969851415431977": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5194218317093355880": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4985005591667958728": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6496314518575785553": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "8823934180192936138": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "1121813851854696821": {
+      "visits": 10,
+      "score": 0.3743798,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11901663194318861434": {
+      "visits": 10,
+      "score": 0.37072605,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2379549395074586463": {
+      "visits": 10,
+      "score": 0.36030626,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2076388659675519268": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8519975759151843737": {
+      "visits": 10,
+      "score": 0.3707278,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1260226927261438517": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16183608223681054761": {
+      "visits": 10,
+      "score": 0.36602393,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3251832285932911029": {
+      "visits": 10,
+      "score": 0.35704187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1962716619153946231": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17236895642426396613": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "963866369885100303": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11022878062710634915": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6389307925655864769": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1698635073624352143": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6591264139068025631": {
+      "visits": 10,
+      "score": 0.38040826,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10457935869360693737": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5518230301254404714": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12180350631230071078": {
+      "visits": 10,
+      "score": 0.35339966,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8912329828652775063": {
+      "visits": 10,
+      "score": 0.35675517,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3298389238179642471": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16029595954962048944": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3255924061460764390": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6351561717759505352": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3381828058697907403": {
+      "visits": 10,
+      "score": 0.37305397,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14029604302333413973": {
+      "visits": 10,
+      "score": 0.37553182,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4058019295538617241": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "2799679790218669502": {
+      "visits": 10,
+      "score": 0.36585775,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7554478522035213115": {
+      "visits": 10,
+      "score": 0.36250862,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11358552505633022251": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3698047531380766696": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2007254489345692375": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "734343235805814583": {
+      "visits": 10,
+      "score": 0.37072605,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10574789493640698997": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "17954614799419343915": {
+      "visits": 10,
+      "score": 0.3682679,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4088075589574031003": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13214817174392843692": {
+      "visits": 10,
+      "score": 0.35339966,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6370764306620363946": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4504101655961558569": {
+      "visits": 10,
+      "score": 0.37302387,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13567553640087040972": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6449753219649906034": {
+      "visits": 10,
+      "score": 0.35583735,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11101110393768730196": {
+      "visits": 10,
+      "score": 0.36472726,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7277606157966363833": {
+      "visits": 10,
+      "score": 0.35569215,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9706098888660336619": {
+      "visits": 10,
+      "score": 0.35675517,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1792208197333136812": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8301835064674749330": {
+      "visits": 10,
+      "score": 0.3533997,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14500767464140770056": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12565688541409728759": {
+      "visits": 10,
+      "score": 0.36030626,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10840393111757030590": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "13994373269753030009": {
+      "visits": 10,
+      "score": 0.3533997,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17326284711046324931": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3573341945396445550": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2823540253234228276": {
+      "visits": 10,
+      "score": 0.37318435,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "915677827430862032": {
+      "visits": 10,
+      "score": 0.36842543,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10996335727374182773": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12134732886499925783": {
+      "visits": 10,
+      "score": 0.35009187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4524124741617876628": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16087290400774724847": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12631857386982010109": {
+      "visits": 10,
+      "score": 0.37556243,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4580716112492207280": {
+      "visits": 10,
+      "score": 0.37436813,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "306188428822348629": {
+      "visits": 10,
+      "score": 0.36360952,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14731527871876399477": {
+      "visits": 10,
+      "score": 0.37318438,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18215751877652713040": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12733886861869098714": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1043795767512087088": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10797854278862475909": {
+      "visits": 10,
+      "score": 0.3730239,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14341977656697804295": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "10346554933478749308": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17072711615860933841": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6660074167440892125": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7677112528120464245": {
+      "visits": 10,
+      "score": 0.36829457,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1254030369355987310": {
+      "visits": 10,
+      "score": 0.38040826,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9838145639204083563": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3586911420264144793": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16208035792343521102": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4854924538739126814": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17796452889335806006": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12796773878831488287": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6767389037204784793": {
+      "visits": 10,
+      "score": 0.36360952,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13522415167341713401": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12826808503553379972": {
+      "visits": 10,
+      "score": 0.35704187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7415544369580872667": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15400069895078168716": {
+      "visits": 10,
+      "score": 0.35687715,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4064238134103397600": {
+      "visits": 10,
+      "score": 0.36600018,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16588475263272634701": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7959186422275868638": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7831429004712092874": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "770466021040347773": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10707246107657472278": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8319063256129050076": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17649682993775372805": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11921958434420460165": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3765755453649897187": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7216583566385753664": {
+      "visits": 10,
+      "score": 0.37318438,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2144125988656595670": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15820615187689130248": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15667810301978782544": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13649262680788064054": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2659306144446628796": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16720885171338283358": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "10779366021552305427": {
+      "visits": 10,
+      "score": 0.36600018,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13290227375028745410": {
+      "visits": 10,
+      "score": 0.36030623,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2558449040203340690": {
+      "visits": 10,
+      "score": 0.3661566,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7548315564836244511": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15426436982371066750": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "17117744354414916412": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7695224585688048386": {
+      "visits": 10,
+      "score": 0.3707278,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4784204150683744886": {
+      "visits": 10,
+      "score": 0.37305397,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6305571675711670448": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15943726787892651453": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8181241875972209467": {
+      "visits": 10,
+      "score": 0.35463545,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11236677471902599745": {
+      "visits": 10,
+      "score": 0.36362514,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1566108823984582097": {
+      "visits": 10,
+      "score": 0.37204236,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12375939541806155590": {
+      "visits": 10,
+      "score": 0.36374983,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6618871082076150263": {
+      "visits": 10,
+      "score": 0.35675517,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14052507334946657532": {
+      "visits": 10,
+      "score": 0.35687715,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7518804270575660221": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2834262891169799490": {
+      "visits": 10,
+      "score": 0.36363557,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8798463623657007334": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15144076783191297265": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "1850055484321115254": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "1549667147449898303": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9885807660194448831": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13954489569914432404": {
+      "visits": 10,
+      "score": 0.37305397,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2187337306186702179": {
+      "visits": 10,
+      "score": 0.37436813,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15027513940280792720": {
+      "visits": 10,
+      "score": 0.35463545,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14837212394253650346": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1182166628060418550": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18262693877125344874": {
+      "visits": 10,
+      "score": 0.36826786,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7490896987488260416": {
+      "visits": 10,
+      "score": 0.37318435,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12866678763411821976": {
+      "visits": 10,
+      "score": 0.3625086,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12506806487343735934": {
+      "visits": 10,
+      "score": 0.36374983,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11639022663760124672": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7542049032238333087": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3641873099595313111": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17227400187988642388": {
+      "visits": 10,
+      "score": 0.35335964,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14297045493075586251": {
+      "visits": 10,
+      "score": 0.35689875,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10201470287716367545": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13103094475268184831": {
+      "visits": 10,
+      "score": 0.36138508,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "610039083928949444": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15382856634899366841": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10390970853987868091": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1232113683911382931": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11160796374589921611": {
+      "visits": 10,
+      "score": 0.37925023,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17490280060525503322": {
+      "visits": 10,
+      "score": 0.3755318,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6666607067207114236": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5872963145382691980": {
+      "visits": 10,
+      "score": 0.3671438,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2958884187478176069": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16151562559884636021": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11994388128984287120": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6174984273189989691": {
+      "visits": 10,
+      "score": 0.3556621,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3187753340999224694": {
+      "visits": 10,
+      "score": 0.3718751,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3173839564801729123": {
+      "visits": 10,
+      "score": 0.36585775,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15632381029766969112": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16070530368025158633": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7632922563848460811": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15107938833159174528": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "16535927859278069713": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2081898434357872343": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9599202278159781055": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2242348409287600157": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8001156660672721407": {
+      "visits": 10,
+      "score": 0.37318435,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12671618616647362853": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12382509292034402981": {
+      "visits": 10,
+      "score": 0.3648689,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1504140896589295532": {
+      "visits": 10,
+      "score": 0.35235417,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8446404466017418045": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5701705465985220628": {
+      "visits": 10,
+      "score": 0.36030623,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17364880129660369535": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6122903197354000275": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2469522512990594352": {
+      "visits": 10,
+      "score": 0.3636095,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12453480126316862168": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15526674472135299881": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15066319649587720369": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3839906280625422129": {
+      "visits": 10,
+      "score": 0.3533997,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4000852331878046453": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3730884283611510590": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17385410289332446622": {
+      "visits": 10,
+      "score": 0.38040826,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12200859250295894267": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17644388924434526665": {
+      "visits": 10,
+      "score": 0.35339966,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11467376817115653705": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6438450979140857840": {
+      "visits": 10,
+      "score": 0.35796413,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17355695409024602528": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "13807481013494756346": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11194431973769837417": {
+      "visits": 10,
+      "score": 0.35235417,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9246770722422115442": {
+      "visits": 10,
+      "score": 0.35235417,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3115755766961094057": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2144413684285921514": {
+      "visits": 10,
+      "score": 0.37302387,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5723812554407141702": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13582928450886401524": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4472987867215022070": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7598847612745009791": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9377388895010446829": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12980849043841865583": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17036311242995322868": {
+      "visits": 10,
+      "score": 0.36727867,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14175765943716650932": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8822239915131953553": {
+      "visits": 10,
+      "score": 0.35335964,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "3566413328695355089": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13932072057342202154": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5024585230996291487": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9956302792586718613": {
+      "visits": 10,
+      "score": 0.3660002,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10585669841070910697": {
+      "visits": 10,
+      "score": 0.3707278,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7245311114755643865": {
+      "visits": 10,
+      "score": 0.3636046,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9254965142238040097": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15751674604196594982": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6391413003934001458": {
+      "visits": 10,
+      "score": 0.35463545,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5142449756301443690": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7616339733514862011": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15345371539889174080": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11431724399283529894": {
+      "visits": 10,
+      "score": 0.38040826,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9843026867889914451": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "3380957209966119025": {
+      "visits": 10,
+      "score": 0.36377156,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "15144429639634769727": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6803272446404158921": {
+      "visits": 10,
+      "score": 0.35583732,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16313273255746690664": {
+      "visits": 10,
+      "score": 0.3625395,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2689800667681642920": {
+      "visits": 10,
+      "score": 0.36018452,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4618510216031818997": {
+      "visits": 10,
+      "score": 0.3533997,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17913735637939954088": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10334682358268527183": {
+      "visits": 10,
+      "score": 0.3660002,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9628341845473325122": {
+      "visits": 10,
+      "score": 0.3601427,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8268241001078494063": {
+      "visits": 10,
+      "score": 0.35672647,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9723972961024484462": {
+      "visits": 10,
+      "score": 0.37553182,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6768242490041952046": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12875220068948774384": {
+      "visits": 10,
+      "score": 0.3523542,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12117991464660099969": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "625866886755430983": {
+      "visits": 10,
+      "score": 0.36030626,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "181171989910180931": {
+      "visits": 10,
+      "score": 0.35675517,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1876730228521238387": {
+      "visits": 10,
+      "score": 0.36843312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13832054521458060414": {
+      "visits": 10,
+      "score": 0.36363888,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10533222955035525172": {
+      "visits": 10,
+      "score": 0.37671942,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17419022184708651903": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14719354873227829921": {
+      "visits": 10,
+      "score": 0.35704187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5012658811766728335": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6886581913309701796": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1437205908760758491": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17239998245741597284": {
+      "visits": 10,
+      "score": 0.35009187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7433210176407729826": {
+      "visits": 10,
+      "score": 0.3523542,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10193078772835367155": {
+      "visits": 10,
+      "score": 0.35009187,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4562848071952159522": {
+      "visits": 10,
+      "score": 0.3601719,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6520055656631450663": {
+      "visits": 10,
+      "score": 0.36030626,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10510685381858803911": {
+      "visits": 10,
+      "score": 0.36014274,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "643582845739268229": {
+      "visits": 10,
+      "score": 0.36600018,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "767061899786996292": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "17595762847133712816": {
+      "visits": 10,
+      "score": 0.3755165,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4124655461663872809": {
+      "visits": 10,
+      "score": 0.36600018,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "161870900570124675": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "5385583602209844085": {
+      "visits": 10,
+      "score": 0.36153728,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4171966959926709390": {
+      "visits": 10,
+      "score": 0.3707278,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2056507044499907907": {
+      "visits": 10,
+      "score": 0.36363557,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5130136504573415833": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9265344011097235429": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10007328531891565963": {
+      "visits": 10,
+      "score": 0.37925023,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5165511421649136598": {
+      "visits": 10,
+      "score": 0.357837,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12465962812692858401": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13394567342694095930": {
+      "visits": 10,
+      "score": 0.3684074,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11346115152068019689": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2996701215028259288": {
+      "visits": 10,
+      "score": 0.35796416,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4047854540137517726": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6300642550836364663": {
+      "visits": 10,
+      "score": 0.36139378,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7320721442619193898": {
+      "visits": 10,
+      "score": 0.37302387,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "9720146165348557377": {
+      "visits": 10,
+      "score": 0.3718751,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "6619507797317306055": {
+      "visits": 10,
+      "score": 0.36362514,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4479544372908011674": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "16281034049524596325": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "4833506521796883997": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18032407736751956833": {
+      "visits": 10,
+      "score": 0.35672647,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8409397969808736755": {
+      "visits": 10,
+      "score": 0.3612446,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7932318134129266176": {
+      "visits": 10,
+      "score": 0.3755318,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5635062522210066201": {
+      "visits": 10,
+      "score": 0.3647302,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8409251695234919552": {
+      "visits": 10,
+      "score": 0.35796416,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "13934139599944132758": {
+      "visits": 10,
+      "score": 0.35796413,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "18334436777697155029": {
+      "visits": 10,
+      "score": 0.3671571,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11469356233418394631": {
+      "visits": 10,
+      "score": 0.5,
+      "best_piece": 11,
+      "best_variant": 2,
+      "best_x": 16,
+      "best_y": 0
+    },
+    "18024230433690785615": {
+      "visits": 10,
+      "score": 0.369415,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "14464558117212654706": {
+      "visits": 10,
+      "score": 0.3730239,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "7371164441007837586": {
+      "visits": 10,
+      "score": 0.36828217,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12229770668931249165": {
+      "visits": 10,
+      "score": 0.36475784,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5613239658063869415": {
+      "visits": 10,
+      "score": 0.36362255,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1649486049927929879": {
+      "visits": 10,
+      "score": 0.36030623,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "5945335042564581152": {
+      "visits": 10,
+      "score": 0.37188596,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "11138293716511230157": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "12420745349222089693": {
+      "visits": 10,
+      "score": 0.3535485,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "10654807265637906509": {
+      "visits": 10,
+      "score": 0.36957312,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "1286353982742383210": {
+      "visits": 10,
+      "score": 0.36125943,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "16794937855581455556": {
+      "visits": 10,
+      "score": 0.36138508,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "8508329959597802531": {
+      "visits": 10,
+      "score": 0.36374983,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    },
+    "2634830300468062884": {
+      "visits": 10,
+      "score": 0.36139607,
+      "best_piece": 24,
+      "best_variant": 5,
+      "best_x": 16,
+      "best_y": 17
+    }
+  }
+}

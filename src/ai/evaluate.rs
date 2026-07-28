@@ -4,6 +4,12 @@ use crate::game::board::{Board, CellState, Corner};
 use crate::game::piece::{PieceShape, PieceVariant};
 use crate::game::player::PlayerId;
 
+pub const TOTAL_PIECE_AREA: f32 = 400.0;
+
+pub fn compute_progress(occupied: f32, total: f32) -> f32 {
+    (occupied / total).clamp(0.0, 1.0)
+}
+
 /// 盤面階段權重
 #[derive(Debug, Clone, Copy)]
 pub struct GamePhaseWeights {
@@ -347,6 +353,100 @@ pub fn heuristic_evaluate<const N: usize>(
 
 fn apply_weight(my: &mut f32, opp: &mut f32, is_me: bool, value: f32, weight: f32) {
     if is_me { *my += value * weight; } else { *opp += value * weight; }
+}
+
+/// Rollout 用盤面評估（支援深層特徵 + NN 混合）
+pub fn rollout_heuristic_evaluate<const N: usize>(
+    board: &Board<N>,
+    player: PlayerId,
+    all_players: &[PlayerId],
+    remaining_pieces: Option<&[PieceShape]>,
+    progress: f32,
+    placed_value: f32,
+) -> f32 {
+    let mut my_score = 0.0;
+    let mut opp_score = 0.0;
+
+    for &p in all_players {
+        let is_me = p == player;
+        apply_weight(&mut my_score, &mut opp_score, is_me,
+            count_expandable_corners(board, p) as f32, 5.0);
+        let mob = estimate_mobility(board, p);
+        let total_empty = board.cells.iter().flatten()
+            .filter(|&&c| c == CellState::Empty).count().max(1) as f32;
+        let mob_norm = (mob / total_empty).sqrt();
+        apply_weight(&mut my_score, &mut opp_score, is_me, mob_norm, 5.0);
+        apply_weight(&mut my_score, &mut opp_score, is_me,
+            center_proximity(board, p), 3.0);
+        apply_weight(&mut my_score, &mut opp_score, is_me,
+            frontier_quality(board, p), 2.0);
+        let future_weight = if progress < 0.25 { 0.5 } else { 1.0 };
+        apply_weight(&mut my_score, &mut opp_score, is_me,
+            future_mobility(board, p), future_weight);
+    }
+
+    // Remaining Burden
+    if let Some(rem) = remaining_pieces {
+        let phase_w = if progress < 0.3 { 0.3 } else if progress < 0.7 { 1.0 } else { 2.0 };
+        let compat = piece_compatibility_estimate(board, player, rem);
+        for &p in all_players {
+            let is_me = p == player;
+            let burden: f32 = rem.iter()
+                .map(|s| {
+                    let size2 = (s.base.cells.len() as f32).powi(2);
+                    size2 * (1.0 - compat)
+                }).sum();
+            apply_weight(&mut my_score, &mut opp_score, is_me, -burden, phase_w * 0.01);
+        }
+    }
+
+    // Placed value + center bonus
+    if placed_value > 0.0 {
+        let pw = if progress < 0.25 { 0.40 } else { 0.30 };
+        apply_weight(&mut my_score, &mut opp_score, true, placed_value, pw);
+        if progress < 0.3 {
+            let center = center_proximity(board, player);
+            apply_weight(&mut my_score, &mut opp_score, true,
+                placed_value * center, 0.20);
+        } else if progress < 0.5 {
+            let center = center_proximity(board, player);
+            apply_weight(&mut my_score, &mut opp_score, true,
+                placed_value * center, 0.10);
+        }
+    }
+
+    // Opponent pressure
+    let my_future = future_mobility(board, player);
+    let opp_avg_future: f32 = all_players.iter()
+        .filter(|p| **p != player)
+        .map(|p| future_mobility(board, *p))
+        .sum::<f32>() / (all_players.len() - 1).max(1) as f32;
+    my_score += (my_future - opp_avg_future * 0.3) * 1.0;
+
+    // Blocking
+    let my_corners = count_expandable_corners(board, player) as f32;
+    let opp_corners: f32 = all_players.iter()
+        .filter(|p| **p != player)
+        .map(|p| count_expandable_corners(board, *p) as f32)
+        .sum::<f32>() / (all_players.len() - 1).max(1) as f32;
+    my_score += (my_corners - opp_corners) * 2.0;
+
+    // Center control bonus (opening)
+    if progress < 0.3 {
+        let occupied = board.cells.iter().flatten()
+            .filter(|&&c| c == CellState::Occupied(player)).count() as f32;
+        let center_control = center_proximity(board, player) * occupied.sqrt();
+        my_score += center_control * 1.5;
+    }
+
+    // Output normalization
+    let opponent_count = (all_players.len() - 1).max(1) as f32;
+    let opp_avg = opp_score / opponent_count;
+    let diff = my_score - opp_avg;
+    let mut value = 0.5 + diff / (diff.abs() + 20.0) * 0.5;
+    value = value.clamp(0.01, 0.99);
+
+    value
 }
 
 /// 終局盤面評估

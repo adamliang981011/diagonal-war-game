@@ -29,7 +29,7 @@ fn simulate_partial<const N: usize>(
         let is_first = !board.cells.iter().flatten().any(|&c| CellState::Occupied(pid) == c);
         let corner = match player_idx { 0 => Corner::TopLeft, _ => Corner::TopRight };
 
-        let mv = ai_choose(&board, pid, remaining, is_first, Some(corner), diff);
+        let mv = ai_choose(&board, pid, remaining, is_first, Some(corner), diff, 2);
         if let Some(m) = mv {
             let variant = &remaining[m.piece_index].variants[m.variant_index];
             board.place_piece(variant, m.x, m.y, pid);
@@ -84,7 +84,7 @@ fn test_all_levels_can_place_first_move() {
     for (i, diff) in levels.iter().enumerate() {
         let pid = PlayerId(i);
         let corner = match i { 0 => Corner::TopLeft, 1 => Corner::TopRight, 2 => Corner::BottomRight, _ => Corner::BottomLeft };
-        let result = ai_choose(&board, pid, &all_pieces, true, Some(corner), *diff);
+        let result = ai_choose(&board, pid, &all_pieces, true, Some(corner), *diff, 4);
         assert!(result.is_some(), "Level {} (AI {:?}) 無法選擇第一步", i + 1, diff);
     }
 }

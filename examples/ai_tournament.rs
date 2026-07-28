@@ -25,7 +25,7 @@ fn play_game<const N: usize>(ai_a: AiDifficulty, ai_b: AiDifficulty) -> Option<u
                 .filter(|(i, _)| !used_a.contains(i)).map(|(_, p)| p.clone()).collect();
             let mv = ai_choose(&board, PlayerId(0), &remaining,
                 !board.cells.iter().flatten().any(|&c| CellState::Occupied(PlayerId(0)) == c),
-                Some(Corner::TopLeft), ai_a);
+                Some(Corner::TopLeft), ai_a, 2);
             if let Some(m) = mv {
                 let v = &remaining[m.piece_index].variants[m.variant_index];
                 board.place_piece(v, m.x, m.y, PlayerId(0));
@@ -37,7 +37,7 @@ fn play_game<const N: usize>(ai_a: AiDifficulty, ai_b: AiDifficulty) -> Option<u
                 .filter(|(i, _)| !used_b.contains(i)).map(|(_, p)| p.clone()).collect();
             let mv = ai_choose(&board, PlayerId(1), &remaining,
                 !board.cells.iter().flatten().any(|&c| CellState::Occupied(PlayerId(1)) == c),
-                Some(Corner::TopRight), ai_b);
+                Some(Corner::TopRight), ai_b, 2);
             if let Some(m) = mv {
                 let v = &remaining[m.piece_index].variants[m.variant_index];
                 board.place_piece(v, m.x, m.y, PlayerId(1));

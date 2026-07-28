@@ -70,7 +70,7 @@ fn negamax<const N: usize>(
     if moves.is_empty() || depth == 0 {
         // 終止搜尋：使用 heuristic 評估
         let occupied = board.cells.iter().flatten().filter(|&&c| c != CellState::Empty).count() as f32;
-        let weights = crate::ai::evaluate::compute_phase_weights(occupied, 119.0);
+        let weights = crate::ai::evaluate::compute_phase_weights(occupied, crate::ai::evaluate::TOTAL_PIECE_AREA);
         return crate::ai::evaluate::heuristic_evaluate_with_weights(board, player, all_players, &weights);
     }
 

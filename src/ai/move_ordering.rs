@@ -1,4 +1,5 @@
 use crate::ai::evaluate;
+use crate::ai::opening;
 use crate::game::board::{Board, CellState};
 use crate::game::piece::{PieceShape, PieceVariant};
 use crate::game::player::PlayerId;
@@ -24,8 +25,41 @@ pub fn order_moves<const N: usize>(
     moves.copy_from_slice(&sorted);
 }
 
-/// 單一棋步的綜合評分（使用動態權重）
-fn score_move<const N: usize>(
+/// 形狀別棋值表（依進度變化）
+pub fn piece_value_table(progress: f32, cells: &[(i32, i32)]) -> f32 {
+    let n = cells.len();
+    let w = cells.iter().map(|&(x, _)| x).max().unwrap_or(0)
+             - cells.iter().map(|&(x, _)| x).min().unwrap_or(0) + 1;
+    let h = cells.iter().map(|&(_, y)| y).max().unwrap_or(0)
+             - cells.iter().map(|&(_, y)| y).min().unwrap_or(0) + 1;
+    let spread = (w * h) as f32 / n as f32;
+
+    let base = match n {
+        7 => 120.0, 6 => 100.0, 5 => 80.0,
+        4 => 60.0, 3 => 40.0, 2 => 20.0, _ => 10.0,
+    };
+    let shape_bonus = if spread > 2.0 { 20.0 } else { 0.0 };
+
+    let decay = (progress * 3.0).min(1.0);
+    base * (1.0 - decay) + (base * 0.3 + shape_bonus * 0.5) * decay
+}
+
+/// 計算先驗機率 prior（固定公式，獨立於 score_move）
+pub fn compute_prior<const N: usize>(
+    board: &Board<N>,
+    variant: &PieceVariant,
+    x: i32, y: i32,
+    player: PlayerId,
+    progress: f32,
+) -> f32 {
+    let size_val = piece_value_table(progress, &variant.cells);
+    let heat_val = opening::centroid_heat(variant, x, y) * 25.0;
+    let corner_val = evaluate::count_corner_contacts(board, variant, x, y, player) as f32 * 5.0;
+    0.45 * size_val + 0.25 * heat_val + 0.20 * corner_val + 0.10 * 0.0
+}
+
+/// 單一棋步的綜合評分（使用動態權重，僅用於 order_moves 排序）
+pub fn score_move<const N: usize>(
     board: &Board<N>,
     variant: &PieceVariant,
     x: i32,

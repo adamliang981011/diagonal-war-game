@@ -215,7 +215,7 @@ fn handle_restart_click(
             *game = GameResource::new(&config);
             game.phase = GamePhase::Menu;
             for entity in &overlay_query {
-                commands.entity(entity).despawn();
+                if let Ok(mut ec) = commands.get_entity(entity) { ec.despawn(); }
             }
         }
     }

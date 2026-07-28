@@ -159,6 +159,6 @@ fn fast_playout<const N: usize>(
 
     // 使用啟發式評估而非單純算佔領比例
     let occupied = sim_board.cells.iter().flatten().filter(|&&c| c != CellState::Empty).count() as f32;
-    let weights = crate::ai::evaluate::compute_phase_weights(occupied, 119.0);
+    let weights = crate::ai::evaluate::compute_phase_weights(occupied, crate::ai::evaluate::TOTAL_PIECE_AREA);
     crate::ai::evaluate::heuristic_evaluate_with_weights(&sim_board, root_player, all_players, &weights)
 }

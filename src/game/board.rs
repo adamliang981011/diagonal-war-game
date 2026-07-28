@@ -37,6 +37,23 @@ pub enum PlacementError {
     MustCoverStartingCorner,
 }
 
+// ============================================================
+// GameBoard trait — 通用棋盤介面
+// ============================================================
+
+pub trait GameBoard: Clone + Send + Sync {
+    fn is_in_bounds(&self, x: i32, y: i32) -> bool;
+    fn get_cell(&self, x: i32, y: i32) -> CellState;
+    fn board_hash(&self) -> u64;
+    fn is_valid(&self, variant: &PieceVariant, x: i32, y: i32, player: PlayerId, is_first: bool, corner: Option<Corner>) -> Result<(), PlacementError>;
+    fn place_piece(&mut self, variant: &PieceVariant, x: i32, y: i32, player: PlayerId);
+    fn try_place(&mut self, variant: &PieceVariant, x: i32, y: i32, player: PlayerId, is_first: bool, corner: Option<Corner>) -> Result<(), PlacementError>;
+}
+
+// ============================================================
+// Board<const N: usize> — 方板實作
+// ============================================================
+
 /// 泛型棋盤
 #[derive(Debug, Clone)]
 pub struct Board<const N: usize> {
@@ -222,6 +239,15 @@ impl<const N: usize> Default for Board<N> {
     fn default() -> Self {
         Self::new()
     }
+}
+
+impl<const N: usize> GameBoard for Board<N> {
+    fn is_in_bounds(&self, x: i32, y: i32) -> bool { self.is_in_bounds(x, y) }
+    fn get_cell(&self, x: i32, y: i32) -> CellState { self.get_cell(x, y) }
+    fn board_hash(&self) -> u64 { self.board_hash() }
+    fn is_valid(&self, var: &PieceVariant, x: i32, y: i32, p: PlayerId, f: bool, c: Option<Corner>) -> Result<(), PlacementError> { self.is_valid(var, x, y, p, f, c) }
+    fn place_piece(&mut self, var: &PieceVariant, x: i32, y: i32, p: PlayerId) { self.place_piece(var, x, y, p) }
+    fn try_place(&mut self, var: &PieceVariant, x: i32, y: i32, p: PlayerId, f: bool, c: Option<Corner>) -> Result<(), PlacementError> { self.try_place(var, x, y, p, f, c) }
 }
 
 #[cfg(test)]

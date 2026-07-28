@@ -89,7 +89,7 @@ fn update_piece_panel(
     *prev_state = state;
 
     for entity in &existing {
-        commands.entity(entity).despawn();
+        if let Ok(mut ec) = commands.get_entity(entity) { ec.despawn(); }
     }
 
     let player = game.current_player_ref();

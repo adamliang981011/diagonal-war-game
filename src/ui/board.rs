@@ -92,7 +92,9 @@ fn update_ghost_piece(
     *last_state = new_state;
 
     for entity in &ghost_query {
-        commands.entity(entity).despawn();
+        if let Ok(mut ec) = commands.get_entity(entity) {
+            ec.despawn();
+        }
     }
 
     let Some((gx, gy)) = cursor_grid_pos(&windows, &cameras) else {

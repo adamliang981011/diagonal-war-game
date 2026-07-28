@@ -39,7 +39,7 @@ fn main() {
                     ..default()
                 })
                 .set(LogPlugin {
-                    filter: "info,bevy_text=info,wgpu_core=warn,wgpu_hal=warn,cosmic_text=warn,icu_segmenter=error".into(),
+                    filter: "info,bevy_text=info,bevy_ecs::error=error,wgpu_core=warn,wgpu_hal=warn,cosmic_text=warn,icu_segmenter=error".into(),
                     ..default()
                 }),
         )
@@ -68,6 +68,11 @@ fn load_or_train_book() -> OpeningBook {
     }
 
     println!("[OpeningBook] 未找到已訓練的開局書，開始訓練...");
+
+    // 確保 assets/ 目錄存在
+    if let Some(parent) = std::path::Path::new(path).parent() {
+        let _ = std::fs::create_dir_all(parent);
+    }
 
     let pieces = piece_library::create_all_pieces();
     match train_depth_3(&pieces, path) {

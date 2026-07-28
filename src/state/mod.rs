@@ -6,6 +6,12 @@ use crate::game::board::Board;
 use crate::game::piece_library;
 use crate::game::player::{starting_corner_for_player, Player, PlayerId};
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum BoardType {
+    Square,
+    Hex,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum GamePhase {
     Menu,
@@ -33,6 +39,7 @@ pub struct GameResource {
 
 #[derive(Resource)]
 pub struct GameConfig {
+    pub board_type: BoardType,
     pub player_count: usize,
     pub is_ai: Vec<bool>,
     pub ai_difficulties: Vec<AiDifficulty>,
@@ -41,6 +48,7 @@ pub struct GameConfig {
 impl Default for GameConfig {
     fn default() -> Self {
         Self {
+            board_type: BoardType::Square,
             player_count: 2,
             is_ai: vec![false, false],
             ai_difficulties: vec![AiDifficulty::Greedy, AiDifficulty::Greedy],
@@ -196,36 +204,31 @@ pub fn handle_ai_turn(
         let pid = game.current_player_id();
         let is_first = game.is_first_move();
         let corner = game.starting_corner();
-        let board_copy = game.board.clone();
 
-        // 檢查開局書
-        let mv = if let Some(entry) = book.book.lookup(board_copy.board_hash()) {
-            // 開局書的 piece_index 是基於完整棋子庫，需轉換為 remaining 中的索引
-            let full_id = crate::game::piece_library::create_all_pieces()[entry.best_piece].id;
-            if let Some(pi) = remaining.iter().position(|p| p.id == full_id) {
-                let variant = &remaining[pi].variants[entry.best_variant];
-                // 驗證開局書回傳的步在當前盤面是否合法
-                if board_copy.is_valid(variant, entry.best_x, entry.best_y, pid, is_first, corner).is_ok() {
-                    Some(AiMove {
-                        piece_index: pi,
-                        variant_index: entry.best_variant,
-                        x: entry.best_x,
-                        y: entry.best_y,
-                        score: (entry.score * 1000.0) as i32,
-                    })
+        let mv = {
+            // 方板模式
+            let board_copy = game.board.clone();
+
+            // 檢查開局書
+            if let Some(entry) = book.book.lookup(board_copy.board_hash()) {
+                let full_id = crate::game::piece_library::create_all_pieces()[entry.best_piece].id;
+                if let Some(pi) = remaining.iter().position(|p| p.id == full_id) {
+                    let variant = &remaining[pi].variants[entry.best_variant];
+                    if board_copy.is_valid(variant, entry.best_x, entry.best_y, pid, is_first, corner).is_ok() {
+                        Some(AiMove {
+                            piece_index: pi, variant_index: entry.best_variant,
+                            x: entry.best_x, y: entry.best_y,
+                            score: (entry.score * 1000.0) as i32,
+                        })
+                    } else {
+                        ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr], game.players.len())
+                    }
                 } else {
-                    // 不合法 → 改用即時 AI
-                    ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr],
-                        game.players.len())
+                    ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr], game.players.len())
                 }
             } else {
-                // 開局書回傳的棋子已被使用，改用即時 AI
-                ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr],
-                    game.players.len())
+                ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr], game.players.len())
             }
-        } else {
-            ai_choose(&board_copy, pid, &remaining, is_first, corner, config.ai_difficulties[curr],
-                game.players.len())
         };
         ai_timer.computed_move = mv;
     }
@@ -235,12 +238,14 @@ pub fn handle_ai_turn(
         return;
     }
 
-    if let Some(mv) = ai_timer.computed_move.take() {
-        let variant = game.players[curr].remaining_pieces[mv.piece_index].variants[mv.variant_index].clone();
-        let pid = game.current_player_id();
-        let shape_id = game.players[curr].remaining_pieces[mv.piece_index].id;
-        game.board.place_piece(&variant, mv.x, mv.y, pid);
-        game.current_player_mut().remove_piece(shape_id);
+        if let Some(mv) = ai_timer.computed_move.take() {
+            let variant = game.players[curr].remaining_pieces[mv.piece_index].variants[mv.variant_index].clone();
+            let pid = game.current_player_id();
+            let shape_id = game.players[curr].remaining_pieces[mv.piece_index].id;
+
+            game.board.place_piece(&variant, mv.x, mv.y, pid);
+
+            game.current_player_mut().remove_piece(shape_id);
         game.current_player_mut().has_placed_first_piece = true;
         game.advance_turn();
     } else {
@@ -251,5 +256,9 @@ pub fn handle_ai_turn(
             game.advance_turn();
         }
     }
+    // 全 AI 對局時啟動背景搜尋
+    let all_ai = config.is_ai.iter().all(|&is| is);
+    crate::ai::mcts::set_ponder_enabled(all_ai);
+
     ai_timer.active = false;
 }
