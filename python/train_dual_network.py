@@ -95,12 +95,15 @@ def soft_cross_entropy(logits: torch.Tensor, target_indices: list[torch.Tensor],
     """Soft Cross Entropy: -Σ π(a) log P(a), supports sparse targets per sample."""
     B = logits.size(0)
     log_probs = F.log_softmax(logits, dim=1)  # (B, 70400)
+    dev = logits.device
     total_loss = 0.0
     for i in range(B):
         if target_indices[i].numel() == 0:
             continue
-        log_p = log_probs[i][target_indices[i]]  # (N_i,)
-        total_loss = total_loss - (target_probs[i] * log_p).sum()
+        idx = target_indices[i].to(dev)
+        prob = target_probs[i].to(dev)
+        log_p = log_probs[i][idx]  # (N_i,)
+        total_loss = total_loss - (prob * log_p).sum()
     return total_loss / B
 
 
@@ -153,21 +156,21 @@ def train():
         model.train()
         train_loss_v, train_loss_p, train_count = 0.0, 0.0, 0
         for batch in tqdm(train_loader, desc=f"Epoch {epoch}/{args.epochs}", leave=False):
-            board, value, pc_idx, pol_idx, pol_prob = [x.to(DEVICE) for x in batch]
+            boards, values, pc_idxs, pol_idxs, pol_probs = batch
+            boards, values, pc_idxs = boards.to(DEVICE), values.to(DEVICE), pc_idxs.to(DEVICE)
             optimizer.zero_grad()
-            policy_logits, pred_value = model(board, pc_idx)
+            policy_logits, pred_value = model(boards, pc_idxs)
 
-            loss_v = F.mse_loss(pred_value, value)
-            loss_p = soft_cross_entropy(policy_logits,
-                                        [p for p in pol_idx], [p for p in pol_prob])
+            loss_v = F.mse_loss(pred_value, values)
+            loss_p = soft_cross_entropy(policy_logits, pol_idxs, pol_probs)
             loss = loss_v + args.policy_weight * loss_p
             loss.backward()
             torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
             optimizer.step()
 
-            train_loss_v += loss_v.item() * board.size(0)
-            train_loss_p += loss_p.item() * board.size(0)
-            train_count += board.size(0)
+            train_loss_v += loss_v.item() * boards.size(0)
+            train_loss_p += loss_p.item() * boards.size(0)
+            train_count += boards.size(0)
 
         train_loss_v /= train_count
         train_loss_p /= train_count
@@ -177,14 +180,14 @@ def train():
         val_loss_v, val_loss_p, val_count = 0.0, 0.0, 0
         with torch.no_grad():
             for batch in val_loader:
-                board, value, pc_idx, pol_idx, pol_prob = [x.to(DEVICE) for x in batch]
-                policy_logits, pred_value = model(board, pc_idx)
-                loss_v = F.mse_loss(pred_value, value)
-                loss_p = soft_cross_entropy(policy_logits,
-                                           [p for p in pol_idx], [p for p in pol_prob])
-                val_loss_v += loss_v.item() * board.size(0)
-                val_loss_p += loss_p.item() * board.size(0)
-                val_count += board.size(0)
+                boards, values, pc_idxs, pol_idxs, pol_probs = batch
+                boards, values, pc_idxs = boards.to(DEVICE), values.to(DEVICE), pc_idxs.to(DEVICE)
+                policy_logits, pred_value = model(boards, pc_idxs)
+                loss_v = F.mse_loss(pred_value, values)
+                loss_p = soft_cross_entropy(policy_logits, pol_idxs, pol_probs)
+                val_loss_v += loss_v.item() * boards.size(0)
+                val_loss_p += loss_p.item() * boards.size(0)
+                val_count += boards.size(0)
 
         val_loss_v /= val_count
         val_loss_p /= val_count
