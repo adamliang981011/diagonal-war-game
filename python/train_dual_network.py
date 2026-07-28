@@ -8,7 +8,7 @@ Usage:
         --epochs 50
 """
 
-import argparse, os, glob
+import argparse, os, glob, csv
 import numpy as np
 import torch
 import torch.nn as nn
@@ -55,13 +55,14 @@ class DualHeadNetwork(nn.Module):
             nn.ReLU(),
         )
         self.blocks = nn.Sequential(*[ResidualBlock(N_CHANNELS) for _ in range(6)])
-        # Policy head (with bottleneck: 12800 → 512 → 70400)
+        # Policy head (with bottleneck: 12800 → 512 → Dropout → 70400)
         self.policy_head = nn.Sequential(
             nn.Conv2d(N_CHANNELS, 32, 1),
             nn.ReLU(),
             nn.Flatten(),
             nn.Linear(32 * BOARD_SIZE * BOARD_SIZE, 512),
             nn.ReLU(),
+            nn.Dropout(0.3),
             nn.Linear(512, MAX_ACTIONS),
         )
         # Value head
@@ -147,70 +148,113 @@ def train():
 
     model = DualHeadNetwork().to(DEVICE)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs)
 
-    os.makedirs(os.path.dirname(args.model_path) or ".", exist_ok=True)
+    model_path = args.model_path
+    base_dir = os.path.dirname(model_path) or "."
+    os.makedirs(base_dir, exist_ok=True)
+    log_path = os.path.join(base_dir, "training_log.csv")
 
-    best_loss = float('inf')
-    for epoch in range(1, args.epochs + 1):
-        model.train()
-        train_loss_v, train_loss_p, train_count = 0.0, 0.0, 0
-        for batch in tqdm(train_loader, desc=f"Epoch {epoch}/{args.epochs}", leave=False):
-            boards, values, pc_idxs, pol_idxs, pol_probs = batch
-            boards, values, pc_idxs = boards.to(DEVICE), values.to(DEVICE), pc_idxs.to(DEVICE)
-            optimizer.zero_grad()
-            policy_logits, pred_value = model(boards, pc_idxs)
+    # Scheduler: ReduceLROnPlateau monitors policy val loss
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode="min", factor=0.5, patience=2,
+        cooldown=1, min_lr=1e-6,
+    )
 
-            loss_v = F.mse_loss(pred_value, values)
-            loss_p = soft_cross_entropy(policy_logits, pol_idxs, pol_probs)
-            loss = loss_v + args.policy_weight * loss_p
-            loss.backward()
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-            optimizer.step()
+    # Early Stopping: monitors policy val loss
+    best_val_p = float('inf')
+    best_epoch = 0
+    patience_counter = 0
+    patience = 5
 
-            train_loss_v += loss_v.item() * boards.size(0)
-            train_loss_p += loss_p.item() * boards.size(0)
-            train_count += boards.size(0)
+    with open(log_path, "w", newline="") as log_file:
+        writer = csv.writer(log_file)
+        writer.writerow(["epoch", "train_value_loss", "train_policy_loss",
+                         "val_value_loss", "val_policy_loss", "learning_rate"])
 
-        train_loss_v /= train_count
-        train_loss_p /= train_count
-
-        # Validation
-        model.eval()
-        val_loss_v, val_loss_p, val_count = 0.0, 0.0, 0
-        with torch.no_grad():
-            for batch in val_loader:
+        for epoch in range(1, args.epochs + 1):
+            model.train()
+            train_loss_v, train_loss_p, train_count = 0.0, 0.0, 0
+            for batch in tqdm(train_loader, desc=f"Epoch {epoch}/{args.epochs}", leave=False):
                 boards, values, pc_idxs, pol_idxs, pol_probs = batch
                 boards, values, pc_idxs = boards.to(DEVICE), values.to(DEVICE), pc_idxs.to(DEVICE)
+                optimizer.zero_grad()
                 policy_logits, pred_value = model(boards, pc_idxs)
+
                 loss_v = F.mse_loss(pred_value, values)
                 loss_p = soft_cross_entropy(policy_logits, pol_idxs, pol_probs)
-                val_loss_v += loss_v.item() * boards.size(0)
-                val_loss_p += loss_p.item() * boards.size(0)
-                val_count += boards.size(0)
+                loss = loss_v + args.policy_weight * loss_p
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+                optimizer.step()
 
-        val_loss_v /= val_count
-        val_loss_p /= val_count
-        total_val = val_loss_v + args.policy_weight * val_loss_p
-        scheduler.step()
+                train_loss_v += loss_v.item() * boards.size(0)
+                train_loss_p += loss_p.item() * boards.size(0)
+                train_count += boards.size(0)
 
-        lr_now = scheduler.get_last_lr()[0]
-        print(f"Epoch {epoch}: V={train_loss_v:.4f}/{val_loss_v:.4f}  "
-              f"P={train_loss_p:.4f}/{val_loss_p:.4f}  lr={lr_now:.2e}")
+            train_loss_v /= train_count
+            train_loss_p /= train_count
 
-        if total_val < best_loss:
-            best_loss = total_val
-            torch.save(model.state_dict(), args.model_path)
-            print(f"  → Saved best (total={total_val:.4f})")
+            # Validation
+            model.eval()
+            val_loss_v, val_loss_p, val_count = 0.0, 0.0, 0
+            with torch.no_grad():
+                for batch in val_loader:
+                    boards, values, pc_idxs, pol_idxs, pol_probs = batch
+                    boards, values, pc_idxs = boards.to(DEVICE), values.to(DEVICE), pc_idxs.to(DEVICE)
+                    policy_logits, pred_value = model(boards, pc_idxs)
+                    loss_v = F.mse_loss(pred_value, values)
+                    loss_p = soft_cross_entropy(policy_logits, pol_idxs, pol_probs)
+                    val_loss_v += loss_v.item() * boards.size(0)
+                    val_loss_p += loss_p.item() * boards.size(0)
+                    val_count += boards.size(0)
 
-    torch.save(model.state_dict(), args.model_path.replace('.pt', '_final.pt'))
-    print(f"\nDone! Best total loss: {best_loss:.4f}")
+            val_loss_v /= val_count
+            val_loss_p /= val_count
+            lr_now = optimizer.param_groups[0]["lr"]
+
+            # Step ReduceLROnPlateau with policy val loss
+            scheduler.step(val_loss_p)
+
+            writer.writerow([epoch, f"{train_loss_v:.4f}", f"{train_loss_p:.4f}",
+                             f"{val_loss_v:.4f}", f"{val_loss_p:.4f}", f"{lr_now:.2e}"])
+            log_file.flush()
+
+            print(f"Epoch {epoch}: V={train_loss_v:.4f}/{val_loss_v:.4f}  "
+                  f"P={train_loss_p:.4f}/{val_loss_p:.4f}  lr={lr_now:.2e}")
+
+            # Save last model (always)
+            torch.save(model.state_dict(), model_path.replace('.pt', '_last.pt'))
+
+            # Track best by policy val loss
+            if val_loss_p < best_val_p:
+                best_val_p = val_loss_p
+                best_epoch = epoch
+                patience_counter = 0
+                torch.save(model.state_dict(), model_path)
+                print(f"  → Saved best (val P={val_loss_p:.4f})")
+            else:
+                patience_counter += 1
+                print(f"  val P not improved for {patience_counter}/{patience}")
+
+            # Early stopping
+            if patience_counter >= patience:
+                print(f"\nEarly stopping triggered at epoch {epoch}. Best was epoch {best_epoch} (val P={best_val_p:.4f})")
+                break
+
+    # Restore best model before final export
+    model.load_state_dict(torch.load(model_path))
+    print(f"\nDone! Best epoch: {best_epoch}, best val P: {best_val_p:.4f}")
 
     # Export ONNX
-    export_onnx(model, args.model_path.replace('.pt', '.onnx'))
+    export_onnx(model, model_path.replace('.pt', '.onnx'))
 
 
 def export_onnx(model: nn.Module, onnx_path: str):
+    try:
+        import onnxscript  # noqa: F401
+    except ImportError:
+        raise RuntimeError("Please install onnxscript: pip install onnxscript")
+
     model.eval()
     dummy_board = torch.randn(1, 1, BOARD_SIZE, BOARD_SIZE, device=DEVICE)
     dummy_pc = torch.zeros(1, dtype=torch.long, device=DEVICE)
