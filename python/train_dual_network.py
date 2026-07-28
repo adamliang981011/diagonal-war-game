@@ -104,6 +104,16 @@ def soft_cross_entropy(logits: torch.Tensor, target_indices: list[torch.Tensor],
     return total_loss / B
 
 
+def dual_collate(batch):
+    """Collate function for variable-length sparse policy targets."""
+    boards = torch.stack([b[0] for b in batch], dim=0)
+    values = torch.stack([b[1] for b in batch], dim=0)
+    pc_idxs = torch.stack([b[2] for b in batch], dim=0)
+    pol_idxs = [b[3] for b in batch]
+    pol_probs = [b[4] for b in batch]
+    return boards, values, pc_idxs, pol_idxs, pol_probs
+
+
 def train():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data", type=str, default="training_data/selfplay_*.bin")
@@ -128,9 +138,9 @@ def train():
     train_ds, val_ds = torch.utils.data.random_split(ds, [len(ds) - n_val, n_val])
 
     train_loader = DataLoader(train_ds, batch_size=args.batch_size, shuffle=True,
-                              num_workers=2, pin_memory=True)
+                              num_workers=0, collate_fn=dual_collate)
     val_loader = DataLoader(val_ds, batch_size=args.batch_size, shuffle=False,
-                            num_workers=2, pin_memory=True)
+                            num_workers=0, collate_fn=dual_collate)
 
     model = DualHeadNetwork().to(DEVICE)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
