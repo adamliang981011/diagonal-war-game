@@ -40,11 +40,14 @@ fn main() {
         cfg.print_profile = false;
 
         let start = Instant::now();
-        let result = diagonal_war::ai::mcts::choose_move::<20>(
-            &board, player, &all_pieces, false,
-            starting_corner_for_player(player.0, 2),
-            &cfg, 2, &mut None, &mut None,
-        );
+        let mut result = None;
+        diagonal_war::ai::with_search_state(|search_state| {
+            result = diagonal_war::ai::mcts::choose_move::<20>(
+                &board, player, &all_pieces, false,
+                starting_corner_for_player(player.0, 2),
+                &cfg, 2, &mut None, search_state,
+            );
+        });
         let elapsed = start.elapsed();
 
         let iters_per_sec = total_iters as f64 / elapsed.as_secs_f64();

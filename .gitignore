@@ -7,6 +7,7 @@ target/
 training_data/
 model/
 *.onnx
+*.onnx.data
 *.pt
 *.bin
 

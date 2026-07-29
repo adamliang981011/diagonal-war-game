@@ -176,7 +176,7 @@ impl ValueNetwork {
 
     /// 評估盤面 Value + Policy（雙頭網路）
     ///
-    /// ONNX 輸出順序：output[0]=value, output[1]=policy
+    /// ONNX 輸出順序：output[0]=policy(83200), output[1]=value(1)
     /// 若模型只有 value（舊版），policy 回傳空 Vec
     pub fn evaluate_policy<const N: usize>(
         &self, board: &Board<N>, player: usize, player_count: usize,
@@ -197,16 +197,29 @@ impl ValueNetwork {
                 if outputs.len() < 2 {
                     return (0.5, vec![]);
                 }
-                // output[0] = policy (83200 logits), output[1] = value (scalar)
-                let policy = match outputs[0].clone().into_tensor().to_plain_array_view::<f32>() {
-                    Ok(v) => v.as_slice().unwrap_or(&[]).to_vec(),
-                    Err(_) => vec![],
-                };
-                let value = match outputs[1].clone().into_tensor().to_plain_array_view::<f32>() {
-                    Ok(v) => v.as_slice().unwrap_or(&[0.5])[0].clamp(0.0, 1.0),
-                    Err(_) => 0.5,
-                };
-                (value, policy)
+                // output[0] = policy (1, 83200 logits), output[1] = value (scalar)
+                let mut logits: Vec<f32> = outputs[0].clone().into_tensor()
+                    .to_plain_array_view::<f32>()
+                    .ok()
+                    .map(|v| v.iter().copied().collect())
+                    .unwrap_or_default();
+                // Softmax: transform logits → probabilities [0, 1]
+                if !logits.is_empty() {
+                    let max_logit = logits.iter().cloned().fold(f32::MIN, f32::max);
+                    let sum: f32 = logits.iter().map(|l| (l - max_logit).exp()).sum();
+                    if sum > 0.0 {
+                        for l in &mut logits {
+                            *l = (*l - max_logit).exp() / sum;
+                        }
+                    }
+                }
+                let value = outputs[1].clone().into_tensor()
+                    .to_plain_array_view::<f32>()
+                    .ok()
+                    .and_then(|v| v.iter().copied().next())
+                    .unwrap_or(0.5)
+                    .clamp(0.0, 1.0);
+                (value, logits)
             }
             Err(e) => {
                 eprintln!("ValueNetwork evaluate_policy error: {e}");

@@ -486,6 +486,19 @@ pub fn choose_move<const N: usize>(
             let q = if child.visits > 0 { child.total_score / child.visits as f32 } else { 0.0 };
             eprintln!("  {}. piece={:2} prior={:.3} visit={:4} Q={:.3}", i+1, child.piece_index, child.prior, child.visits, q);
         }
+        // Influence Profile：顯示 HeuristicPrior vs PolicyPrior vs FinalPrior
+        eprintln!("\nInfluence Profile:");
+        eprintln!("  Move        HeurPrior  PolicyPrior  Visits  Q");
+        for (_, child) in children.iter().take(10) {
+            let q = if child.visits > 0 { child.total_score / child.visits as f32 } else { 0.0 };
+            let aid = crate::ai::move_ordering::action_id(child.piece_index, child.variant_index, child.x, child.y);
+            let policy_val = policy_vec.get(aid).copied().unwrap_or(0.0);
+            let piece_size = remaining_pieces[child.piece_index].base.cells.len();
+            let size_str = format!("{}g", piece_size);
+            eprintln!("  {:>3}{:3}({:2},{:2}) v{:2}  heur={:.5}  pol={:.5}  visit={:4}  Q={:.3}",
+                child.piece_index, size_str, child.x, child.y, child.variant_index,
+                child.prior, policy_val, child.visits, q);
+        }
         crate::ai::value::print_cache_stats();
     }
 

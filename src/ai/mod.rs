@@ -15,6 +15,8 @@ pub mod transposition;
 pub mod value;
 pub mod zobrist;
 
+use std::sync::Mutex;
+
 use crate::game::board::{Board, Corner};
 use crate::game::piece::PieceShape;
 use crate::game::player::PlayerId;
@@ -22,8 +24,22 @@ use crate::game::player::PlayerId;
 /// Tree Reuse 的跨回合搜尋狀態
 pub struct SearchState {
     pub tree: Option<Box<crate::ai::mcts::Tree>>,
-    /// Neural policy vector (70400), 每次 choose_move 開頭推論一次後查表使用
+    /// Neural policy vector (83200), 每次 choose_move 開頭推論一次後查表使用
     pub policy: Vec<f32>,
+}
+
+static GLOBAL_SEARCH: Mutex<Option<SearchState>> = Mutex::new(None);
+
+/// 存取全域 SearchState（首次使用時自動初始化）
+pub fn with_search_state<F, R>(f: F) -> R
+where
+    F: FnOnce(&mut Option<SearchState>) -> R,
+{
+    let mut guard = GLOBAL_SEARCH.lock().unwrap();
+    if guard.is_none() {
+        *guard = Some(SearchState { tree: None, policy: vec![] });
+    }
+    f(&mut *guard)
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -157,7 +173,9 @@ pub fn choose_move<const N: usize>(
         AiDifficulty::Mcts { iterations } => {
             let mut cfg = crate::ai::config::official_config();
             cfg.iterations = iterations;
-            mcts::choose_move(board, player, remaining_pieces, is_first_move, starting_corner, &cfg, player_count, &mut None, &mut None)
+            with_search_state(|search_state| {
+                mcts::choose_move(board, player, remaining_pieces, is_first_move, starting_corner, &cfg, player_count, &mut None, search_state)
+            })
         },
     }
 }
