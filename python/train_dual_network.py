@@ -263,7 +263,7 @@ def export_onnx(model: nn.Module, onnx_path: str):
         (dummy_board, dummy_pc),
         onnx_path,
         input_names=["board", "player_count"],
-        output_names=["value", "policy"],
+        output_names=["policy", "value"],  # forward() returns (policy_logits, value)
         dynamic_axes={
             "board": {0: "batch"}, "player_count": {0: "batch"},
             "value": {0: "batch"}, "policy": {0: "batch"},

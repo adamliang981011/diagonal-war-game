@@ -265,6 +265,14 @@ class PolicyDataset(Dataset):
     def __len__(self):
         return len(self.boards)
 
+    def _transform_coord(self, x: int, y: int, k: int, flip: bool) -> tuple:
+        """Apply rotation (k×90°) and optional horizontal flip to (x, y)."""
+        for _ in range(k):
+            x, y = 19 - y, x
+        if flip:
+            x = 19 - x
+        return x, y
+
     def __getitem__(self, idx: int) -> tuple:
         board = self.boards[idx]
         value = self.values[idx]
@@ -273,7 +281,27 @@ class PolicyDataset(Dataset):
         pol_prob = self.policy_probs[idx]
 
         if self.augment:
-            board = self._augment(board)
+            k = np.random.randint(0, 4)
+            flip = np.random.rand() > 0.5
+            board = np.rot90(board, k=k)
+            if flip:
+                board = np.fliplr(board)
+            # Transform policy coordinates
+            if len(pol_idx) > 0:
+                new_idx = []
+                for aid in pol_idx:
+                    piece = aid // (MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE)
+                    rest = aid % (MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE)
+                    variant = rest // (BOARD_SIZE * BOARD_SIZE)
+                    rest2 = rest % (BOARD_SIZE * BOARD_SIZE)
+                    y = rest2 // BOARD_SIZE
+                    x = rest2 % BOARD_SIZE
+                    nx, ny = self._transform_coord(x, y, k, flip)
+                    new_aid = (piece * MAX_VARIANTS * BOARD_SIZE * BOARD_SIZE
+                               + variant * BOARD_SIZE * BOARD_SIZE
+                               + ny * BOARD_SIZE + nx)
+                    new_idx.append(new_aid)
+                pol_idx = np.array(new_idx, dtype=np.int64)
 
         board_t = torch.from_numpy(board.copy()).unsqueeze(0)
         value_t = torch.tensor(value, dtype=torch.float32)
@@ -281,13 +309,6 @@ class PolicyDataset(Dataset):
         pol_idx_t = torch.from_numpy(pol_idx.copy())
         pol_prob_t = torch.from_numpy(pol_prob.copy())
         return board_t, value_t, pc_idx_t, pol_idx_t, pol_prob_t
-
-    def _augment(self, board: np.ndarray) -> np.ndarray:
-        k = np.random.randint(0, 4)
-        board = np.rot90(board, k=k)
-        if np.random.rand() > 0.5:
-            board = np.fliplr(board)
-        return board
 
 
 def export_flat(path_in: str, path_out_prefix: str):

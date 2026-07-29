@@ -56,7 +56,12 @@ static VALUE_NET: OnceLock<ValueNetwork> = OnceLock::new();
 /// 取得或初始化全域 ValueNetwork
 pub fn get_value_network() -> &'static ValueNetwork {
     VALUE_NET.get_or_init(|| {
-        ValueNetwork::new("model/value_unified.onnx")
+        let path = if Path::new("model/dual_unified.onnx").exists() {
+            "model/dual_unified.onnx"
+        } else {
+            "model/value_unified.onnx"
+        };
+        ValueNetwork::new(path)
     })
 }
 
@@ -189,19 +194,17 @@ impl ValueNetwork {
         ));
         match result {
             Ok(outputs) => {
-                // output[0] = value
-                let value = match outputs[0].clone().into_tensor().to_plain_array_view::<f32>() {
+                if outputs.len() < 2 {
+                    return (0.5, vec![]);
+                }
+                // output[0] = policy (83200 logits), output[1] = value (scalar)
+                let policy = match outputs[0].clone().into_tensor().to_plain_array_view::<f32>() {
+                    Ok(v) => v.as_slice().unwrap_or(&[]).to_vec(),
+                    Err(_) => vec![],
+                };
+                let value = match outputs[1].clone().into_tensor().to_plain_array_view::<f32>() {
                     Ok(v) => v.as_slice().unwrap_or(&[0.5])[0].clamp(0.0, 1.0),
                     Err(_) => 0.5,
-                };
-                // output[1] = policy（若存在）
-                let policy = if outputs.len() > 1 {
-                    match outputs[1].clone().into_tensor().to_plain_array_view::<f32>() {
-                        Ok(v) => v.as_slice().unwrap_or(&[]).to_vec(),
-                        Err(_) => vec![],
-                    }
-                } else {
-                    vec![]
                 };
                 (value, policy)
             }
