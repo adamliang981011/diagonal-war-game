@@ -394,7 +394,7 @@ pub fn choose_move<const N: usize>(
     starting_corner: Option<Corner>,
     config: &crate::ai::config::MctsConfig,
     player_count: usize,
-    _stats: &mut Option<crate::ai::MctsOutput>,
+    stats: &mut Option<crate::ai::MctsOutput>,
     search_state: &mut Option<crate::ai::SearchState>,
 ) -> Option<AiMove> {
     crate::ai::value::clear_nn_cache();
@@ -473,6 +473,30 @@ pub fn choose_move<const N: usize>(
                 x: c.x, y: c.y, score: (avg * 1000.0) as i32,
             }
         });
+
+    // 填充 MctsOutput（供 self-play 使用）
+    if let Some(ref b) = best {
+        let total_v: u32 = merged.nodes[0].children.iter().map(|c| c.visits).sum();
+        let weighted_q: f32 = merged.nodes[0].children.iter()
+            .map(|c| {
+                let q = if c.visits > 0 { c.total_score / c.visits as f32 } else { 0.0 };
+                c.visits as f32 * q
+            })
+            .sum::<f32>() / total_v.max(1) as f32;
+        let visits: Vec<(u32, u32)> = merged.nodes[0].children.iter()
+            .filter(|c| c.visits > 0)
+            .map(|c| {
+                let action = crate::ai::encode_action(c.piece_index, c.variant_index, c.x, c.y);
+                (action, c.visits)
+            })
+            .collect();
+        *stats = Some(crate::ai::MctsOutput {
+            best: b.clone(),
+            visits,
+            total_visits: total_v,
+            value: weighted_q,
+        });
+    }
 
     // Profile 輸出（僅 print_profile 開啟時）
     if config.print_profile {

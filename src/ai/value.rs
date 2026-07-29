@@ -72,7 +72,9 @@ static VALUE_NET: OnceLock<ValueNetwork> = OnceLock::new();
 /// 取得或初始化全域 ValueNetwork
 pub fn get_value_network() -> &'static ValueNetwork {
     VALUE_NET.get_or_init(|| {
-        let path = if Path::new("model/dual_unified.onnx").exists() {
+        let path = if Path::new("model/candidate.onnx").exists() {
+            "model/candidate.onnx"
+        } else if Path::new("model/dual_unified.onnx").exists() {
             "model/dual_unified.onnx"
         } else {
             "model/value_unified.onnx"
