@@ -199,7 +199,7 @@ impl ValueNetwork {
     /// already blended with heuristic_prior using progress-based weights.
     pub fn evaluate_with_candidates<const N: usize>(
         &self, board: &Board<N>, candidates: &[Candidate],
-        _player: usize, player_count: usize, progress: f32,
+        _player: usize, player_count: usize,
     ) -> Option<PolicyResult> {
         let model = self.model.clone()?;
         let max_n = 32;
@@ -238,7 +238,6 @@ impl ValueNetwork {
         let result = model.run(tvec![
             board_t.into_tensor().into(),
             tract_ndarray::Array1::from_vec(vec![pc_idx]).into_tensor().into(),
-            tract_ndarray::Array1::from_vec(vec![progress as f64]).into_tensor().into(),
             tract_ndarray::Array1::from_vec(pieces.clone()).into_tensor().into(),
             tract_ndarray::Array1::from_vec(variants).into_tensor().into(),
             tract_ndarray::Array1::from_vec(xs).into_tensor().into(),
@@ -249,12 +248,12 @@ impl ValueNetwork {
         if result.len() < 2 { return None; }
 
         // output[0] = value (scalar), output[1] = scores (N,)
-        let value = result[1].clone().into_tensor()
-            .to_plain_array_view::<f32>().ok()
+        let value_tensor = result[0].clone().into_tensor();
+        let value = value_tensor.to_plain_array_view::<f32>().ok()
             .and_then(|v| v.iter().copied().next())
             .unwrap_or(0.5).clamp(0.0, 1.0);
 
-        let scores: Vec<f32> = result[0].clone().into_tensor()
+        let scores: Vec<f32> = result[1].clone().into_tensor()
             .to_plain_array_view::<f32>().ok()
             .map(|v| v.iter().copied().collect())
             .unwrap_or_default();
@@ -271,9 +270,12 @@ impl ValueNetwork {
             vec![1.0 / n as f32; n]
         };
 
-        // Blend with heuristic prior
-        let nn_blend = if progress < 0.3 { 0.5 }
-                      else if progress < 0.7 { 0.7 }
+        // Blend with heuristic prior (compute progress from board)
+        let occupied = board.cells.iter().flatten()
+            .filter(|&&c| c != CellState::Empty).count() as f32;
+        let board_progress = (occupied / 400.0).clamp(0.0, 1.0);
+        let nn_blend = if board_progress < 0.3 { 0.5 }
+                      else if board_progress < 0.7 { 0.7 }
                       else { 0.9 };
         for (p, c) in priors.iter_mut().zip(candidates.iter()) {
             *p = *p * nn_blend + c.heuristic_prior * (1.0 - nn_blend);

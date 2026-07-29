@@ -81,7 +81,7 @@ class CandidateNetwork(nn.Module):
             nn.Linear(64 + 64, 64), nn.ReLU(), nn.Linear(64, 1),
         )
 
-    def forward(self, board, player_count, progress,
+    def forward(self, board, player_count,
                 cand_piece, cand_variant, cand_x, cand_y, cand_size):
         # Board Encoder
         x = self.board_conv(board)                           # (B, 64, 20, 20)
@@ -197,7 +197,7 @@ def train():
             cand = {k: v.to(DEVICE) for k, v in cand.items()}
 
             optimizer.zero_grad()
-            pred_v, scores = model(boards, pc_idxs, progress,
+            pred_v, scores = model(boards, pc_idxs,
                                    cand["piece"], cand["variant"],
                                    cand["x"], cand["y"], cand["size"])
             loss_v = F.mse_loss(pred_v, values)
@@ -220,9 +220,9 @@ def train():
             for batch in val_loader:
                 boards, values, pc_idxs, progress, cand = batch
                 boards = boards.to(DEVICE); values = values.to(DEVICE)
-                pc_idxs = pc_idxs.to(DEVICE); progress = progress.to(DEVICE)
+                pc_idxs = pc_idxs.to(DEVICE)
                 cand = {k: v.to(DEVICE) for k, v in cand.items()}
-                pred_v, scores = model(boards, pc_idxs, progress,
+                pred_v, scores = model(boards, pc_idxs,
                                        cand["piece"], cand["variant"],
                                        cand["x"], cand["y"], cand["size"])
                 vv += F.mse_loss(pred_v, values).item() * boards.size(0)
@@ -263,7 +263,6 @@ def export_onnx(model: nn.Module, path: str):
     dummy = (
         torch.randn(1, 1, BOARD_SIZE, BOARD_SIZE, device=DEVICE),
         torch.zeros(1, dtype=torch.long, device=DEVICE),
-        torch.zeros(1, device=DEVICE),
         torch.zeros(1, N, dtype=torch.long, device=DEVICE),
         torch.zeros(1, N, dtype=torch.long, device=DEVICE),
         torch.zeros(1, N, device=DEVICE),
@@ -272,7 +271,8 @@ def export_onnx(model: nn.Module, path: str):
     )
     torch.onnx.export(
         model, dummy, path,
-        input_names=["board", "player_count", "progress",
+        dynamo=False,
+        input_names=["board", "player_count",
                      "cand_piece", "cand_variant", "cand_x", "cand_y", "cand_size"],
         output_names=["value", "scores"],
         dynamic_axes={
@@ -292,12 +292,11 @@ def export_onnx(model: nn.Module, path: str):
     out = sess.run(None, {
         "board": dummy[0].cpu().numpy(),
         "player_count": dummy[1].cpu().numpy(),
-        "progress": dummy[2].cpu().numpy(),
-        "cand_piece": dummy[3].cpu().numpy(),
-        "cand_variant": dummy[4].cpu().numpy(),
-        "cand_x": dummy[5].cpu().numpy(),
-        "cand_y": dummy[6].cpu().numpy(),
-        "cand_size": dummy[7].cpu().numpy(),
+        "cand_piece": dummy[2].cpu().numpy(),
+        "cand_variant": dummy[3].cpu().numpy(),
+        "cand_x": dummy[4].cpu().numpy(),
+        "cand_y": dummy[5].cpu().numpy(),
+        "cand_size": dummy[6].cpu().numpy(),
     })
     print(f"ONNX test: value={out[0][0]:.4f}, scores shape={out[1].shape}")
 
