@@ -52,7 +52,9 @@ pub struct TreeNode {
     pub total_score: f32,
     pub children: Vec<Edge>,
     pub unexpanded: Vec<(usize, usize, i32, i32)>,
-    pub nn_value: f32, // -1.0 = 未計算
+    pub nn_value: f32,        // -1.0 = 未計算
+    pub candidate_priors: Vec<f32>, // 與 unexpanded 一一對應
+    pub nn_evaluated: bool,   // candidate_priors 已計算
 }
 
 #[derive(Clone)]
@@ -62,12 +64,12 @@ pub struct Tree {
 
 impl Tree {
     fn new() -> Self {
-        Self { nodes: vec![TreeNode { visits: 0, total_score: 0.0, children: vec![], unexpanded: vec![], nn_value: -1.0 }] }
+        Self { nodes: vec![TreeNode { visits: 0, total_score: 0.0, children: vec![], unexpanded: vec![], nn_value: -1.0, candidate_priors: vec![], nn_evaluated: false }] }
     }
 
     fn add_child(&mut self, parent: usize, pi: usize, vi: usize, x: i32, y: i32, prior: f32) -> usize {
         let idx = self.nodes.len();
-        self.nodes.push(TreeNode { visits: 0, total_score: 0.0, children: vec![], unexpanded: vec![], nn_value: -1.0 });
+        self.nodes.push(TreeNode { visits: 0, total_score: 0.0, children: vec![], unexpanded: vec![], nn_value: -1.0, candidate_priors: vec![], nn_evaluated: false });
         self.nodes[parent].children.push(Edge {
             piece_index: pi, variant_index: vi, x, y,
             child_idx: idx, visits: 0, total_score: 0.0,
@@ -346,7 +348,7 @@ fn start_ponder<const N: usize>(
                     let apc = all_players_c.clone();
                     let cc = cand.clone();
                     s.spawn(move || {
-                        let _t = run_mcts::<N>(&bc, next_player, &rc, &apc, &cc, per_thread, &[]);
+                        let _t = run_mcts::<N>(&bc, next_player, &rc, &apc, &cc, per_thread);
                     });
                 }
             });
@@ -360,6 +362,8 @@ fn start_ponder<const N: usize>(
                         children: vec![],
                         unexpanded: vec![],
                         nn_value: -1.0,
+                        candidate_priors: vec![],
+                        nn_evaluated: false,
                     });
                     ponder_tree.nodes[0].children.push(Edge {
                         piece_index: sc.piece_index,
@@ -410,20 +414,6 @@ pub fn choose_move<const N: usize>(
     let n_threads = config.parallel_threads.max(1);
     let per_thread = iterations / n_threads;
 
-    // 以 Neural Network 推論 policy（一次，供所有 thread 查表）
-    let vn = crate::ai::value::get_value_network();
-    if vn.is_loaded() {
-        let (_, policy) = vn.evaluate_policy(board, player.0 as usize, player_count);
-        if let Some(state) = search_state {
-            state.policy = policy;
-        }
-    }
-
-    // 取得 policy vector（在 scope 外捕捉，避免借用衝突）
-    let policy_vec: Vec<f32> = search_state.as_ref()
-        .map(|s| s.policy.clone())
-        .unwrap_or_default();
-
     let tree_results: Vec<Tree> = std::thread::scope(|s| {
         let mut handles = Vec::new();
         for _ in 0..n_threads {
@@ -431,9 +421,8 @@ pub fn choose_move<const N: usize>(
             let remaining_c = remaining_pieces.to_vec();
             let all_players_c = all_players.clone();
             let candidates_c = candidates.clone();
-            let policy_c = policy_vec.clone();
             handles.push(s.spawn(move || {
-                run_mcts::<N>(&board_c, player, &remaining_c, &all_players_c, &candidates_c, per_thread, &policy_c)
+                run_mcts::<N>(&board_c, player, &remaining_c, &all_players_c, &candidates_c, per_thread)
             }));
         }
         handles.into_iter().map(|h| h.join().unwrap()).collect::<Vec<_>>()
@@ -453,7 +442,9 @@ pub fn choose_move<const N: usize>(
             } else {
                 // 未合併過的子節點，直接加入
                 let idx = merged.nodes.len();
-                merged.nodes.push(TreeNode { visits: child.visits, total_score: child.total_score, children: vec![], unexpanded: vec![], nn_value: -1.0 });
+                let child_node = tree.nodes.get(child.child_idx);
+                let (nn_v, cand_priors, nn_eval) = child_node.map(|n| (n.nn_value, n.candidate_priors.clone(), n.nn_evaluated)).unwrap_or((-1.0, vec![], false));
+                merged.nodes.push(TreeNode { visits: child.visits, total_score: child.total_score, children: vec![], unexpanded: vec![], nn_value: nn_v, candidate_priors: cand_priors, nn_evaluated: nn_eval });
                 merged.nodes[0].children.push(Edge {
                     piece_index: child.piece_index, variant_index: child.variant_index,
                     x: child.x, y: child.y, child_idx: idx,
@@ -510,18 +501,15 @@ pub fn choose_move<const N: usize>(
             let q = if child.visits > 0 { child.total_score / child.visits as f32 } else { 0.0 };
             eprintln!("  {}. piece={:2} prior={:.3} visit={:4} Q={:.3}", i+1, child.piece_index, child.prior, child.visits, q);
         }
-        // Influence Profile：顯示 HeuristicPrior vs PolicyPrior vs FinalPrior
+        // Influence Profile
         eprintln!("\nInfluence Profile:");
-        eprintln!("  Move        HeurPrior  PolicyPrior  Visits  Q");
+        eprintln!("  Move       FinalPrior  Visits  Q");
         for (_, child) in children.iter().take(10) {
             let q = if child.visits > 0 { child.total_score / child.visits as f32 } else { 0.0 };
-            let aid = crate::ai::move_ordering::action_id(child.piece_index, child.variant_index, child.x, child.y);
-            let policy_val = policy_vec.get(aid).copied().unwrap_or(0.0);
             let piece_size = remaining_pieces[child.piece_index].base.cells.len();
-            let size_str = format!("{}g", piece_size);
-            eprintln!("  {:>3}{:3}({:2},{:2}) v{:2}  heur={:.5}  pol={:.5}  visit={:4}  Q={:.3}",
-                child.piece_index, size_str, child.x, child.y, child.variant_index,
-                child.prior, policy_val, child.visits, q);
+            eprintln!("  {:>3}{:3}({:2},{:2})  {:.5}  {:4}  {:.3}",
+                child.piece_index, piece_size, child.x, child.y,
+                child.prior, child.visits, q);
         }
         crate::ai::value::print_cache_stats();
     }
@@ -548,7 +536,6 @@ fn run_mcts<const N: usize>(
     all_players: &[PlayerId],
     candidates: &[(usize, usize, i32, i32, i32)],
     iterations: usize,
-    policy: &[f32],
 ) -> Tree {
     let mut tree = Tree::new();
     let mut tt = TranspositionTable::new(MAX_TT_SIZE);
@@ -607,52 +594,57 @@ fn run_mcts<const N: usize>(
         }
         if tt_hit { continue; }
 
-        // Expansion：softmax 正規化 prior 後展開一步
+        // Expansion：每個節點僅第一次呼叫 NN，之後 cached
         let mut expanded_nn = -1.0;
+        let mut expand_info: Option<(usize, usize, i32, i32, f32)> = None;
         if let Some(node) = tree.nodes.get_mut(node_idx) {
             if !node.unexpanded.is_empty() && node.children.len() < max_children(node.visits) {
-                // 計算所有 unexpanded 的 raw prior
-                let progress = evaluate::compute_progress(board.cells.iter().flatten()
-                    .filter(|&&c| c != CellState::Empty).count() as f32, evaluate::TOTAL_PIECE_AREA);
-                let raw_priors: Vec<f32> = node.unexpanded.iter()
-                    .map(|&(pi, vi, x, y)| {
-                        let v = &remaining_pieces[pi].variants[vi];
-                        move_ordering::compute_prior(board, v, x, y, player, progress).max(0.0)
-                    })
-                    .collect();
-                // Softmax 正規化
-                let tau = 15.0 * (1.0 - progress) + 5.0 * progress;
-                let max_raw = raw_priors.iter().cloned().fold(f32::MIN, f32::max);
-                let shifted: Vec<f32> = raw_priors.iter()
-                    .map(|s| ((s - max_raw) / tau).exp())
-                    .collect();
-                let sum: f32 = shifted.iter().sum();
-
-                // Pop 並使用正規化後的 prior（混合 neural policy）
-                if let Some((pi, vi, x, y)) = node.unexpanded.pop() {
-                    let idx = node.unexpanded.len(); // 已被 pop，長度即此項原 index
-                    let mut prior = if sum > 0.0 { shifted[idx] / sum } else { 1.0 };
-                    // Neural policy blend（若 policy vector 存在）
-                    if !policy.is_empty() {
-                        let aid = crate::ai::move_ordering::action_id(pi, vi, x, y);
-                        if aid < policy.len() {
-                            const POLICY_BLEND: f32 = 0.5;
-                            prior = prior * (1.0 - POLICY_BLEND) + policy[aid] * POLICY_BLEND;
-                        }
-                    }
-                    let variant = &remaining_pieces[pi].variants[vi];
-                    let c = tree.add_child(node_idx, pi, vi, x, y, prior);
-                    sim_board.place_piece(variant, x, y, sim_player);
-                    path.push((c, Some(node_idx)));
-                    // 計算 NN value
+                // 第一次造訪此節點 → NN 推論並快取
+                if !node.nn_evaluated && !node.unexpanded.is_empty() {
+                    let progress = evaluate::compute_progress(board.cells.iter().flatten()
+                        .filter(|&&c| c != CellState::Empty).count() as f32, evaluate::TOTAL_PIECE_AREA);
+                    let cand_list: Vec<crate::ai::value::Candidate> = node.unexpanded.iter()
+                        .map(|&(pi, vi, x, y)| {
+                            let v = &remaining_pieces[pi].variants[vi];
+                            let hp = move_ordering::compute_prior(board, v, x, y, player, progress).max(0.0);
+                            crate::ai::value::Candidate {
+                                piece: pi as u8, variant: vi as u8,
+                                x: x as i8, y: y as i8,
+                                piece_size: remaining_pieces[pi].base.cells.len() as u8,
+                                heuristic_prior: hp,
+                            }
+                        })
+                        .collect();
                     let vn = crate::ai::value::get_value_network();
                     if vn.is_loaded() {
-                        let nn_v = vn.evaluate(&sim_board, player.0 as usize, all_players.len());
-                        if let Some(n) = tree.nodes.get_mut(c) { n.nn_value = nn_v; }
-                        expanded_nn = nn_v;
+                        if let Some(result) = vn.evaluate_with_candidates(board, &cand_list, player.0 as usize, all_players.len()) {
+                            node.nn_value = result.value;
+                            node.candidate_priors = result.priors;
+                        }
                     }
+                    node.nn_evaluated = true;
+                }
+
+                // Pop 並使用 cached prior
+                if let Some((pi, vi, x, y)) = node.unexpanded.pop() {
+                    let idx = node.unexpanded.len();
+                    let prior = node.candidate_priors.get(idx).copied()
+                        .unwrap_or_else(|| 1.0 / (node.candidate_priors.len().max(1) as f32 + 1.0));
+                    expand_info = Some((pi, vi, x, y, prior));
+                }
+                // 儲存 nn_value 供外部使用
+                if node.nn_evaluated && node.nn_value >= 0.0 {
+                    expanded_nn = node.nn_value;
                 }
             }
+        }
+        // 執行 Expansion（在 mutable borrow 範圍外）
+        if let Some((pi, vi, x, y, prior)) = expand_info {
+            let variant = &remaining_pieces[pi].variants[vi];
+            let c = tree.add_child(node_idx, pi, vi, x, y, prior);
+            sim_board.place_piece(variant, x, y, sim_player);
+            path.push((c, Some(node_idx)));
+            if let Some(n) = tree.nodes.get_mut(c) { n.nn_value = expanded_nn; }
         }
 
         // 從 path 最後節點取得 nn_value

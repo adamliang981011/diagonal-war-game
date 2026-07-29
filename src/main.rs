@@ -48,7 +48,7 @@ fn main() {
         .insert_resource(GameConfig::default())
         .insert_resource(AiTimer::default())
         .insert_resource(OpeningBookResource { book: opening_book })
-        .insert_resource(SearchResource { state: Some(SearchState { tree: None, policy: vec![] }) })
+        .insert_resource(SearchResource { state: Some(SearchState { tree: None }) })
         .add_plugins((BoardPlugin, PanelPlugin, HudPlugin, MenuPlugin))
         .add_systems(Startup, setup_camera)
         .add_systems(Update, handle_ai_turn)

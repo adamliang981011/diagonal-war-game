@@ -24,8 +24,6 @@ use crate::game::player::PlayerId;
 /// Tree Reuse 的跨回合搜尋狀態
 pub struct SearchState {
     pub tree: Option<Box<crate::ai::mcts::Tree>>,
-    /// Neural policy vector (83200), 每次 choose_move 開頭推論一次後查表使用
-    pub policy: Vec<f32>,
 }
 
 static GLOBAL_SEARCH: Mutex<Option<SearchState>> = Mutex::new(None);
@@ -37,7 +35,7 @@ where
 {
     let mut guard = GLOBAL_SEARCH.lock().unwrap();
     if guard.is_none() {
-        *guard = Some(SearchState { tree: None, policy: vec![] });
+        *guard = Some(SearchState { tree: None });
     }
     f(&mut *guard)
 }
