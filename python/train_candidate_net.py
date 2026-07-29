@@ -158,7 +158,8 @@ def train():
     parser.add_argument("--policy-weight", type=float, default=1.0)
     args = parser.parse_args()
 
-    filepaths = sorted(glob.glob(args.data))
+    all_globs = args.data.split()
+    filepaths = sorted(f for g in all_globs for f in glob.glob(g))
     if not filepaths:
         print(f"No files matching {args.data}")
         return
