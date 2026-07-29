@@ -311,6 +311,100 @@ class PolicyDataset(Dataset):
         return board_t, value_t, pc_idx_t, pol_idx_t, pol_prob_t
 
 
+# Piece sizes (26 Blokus pieces, index 0-25)
+PIECE_SIZES = [1, 2, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+
+
+class CandidateDataset(Dataset):
+    """
+    PyTorch Dataset for Candidate Scoring Network training.
+
+    Returns (board, value, pc_idx, progress, candidates).
+
+    candidates is a dict with:
+      piece: (N,) int64
+      variant: (N,) int64
+      x: (N,) float32 (normalized x/19)
+      y: (N,) float32 (normalized y/19)
+      size: (N,) float32 (piece_size/5)
+      prob: (N,) float32 (visit probability target)
+    """
+
+    def __init__(self, filepaths: list[str], augment: bool = True, max_candidates: int = 32):
+        self.samples = []
+        self.augment = augment
+        self.max_candidates = max_candidates
+
+        for fp in filepaths:
+            games = parse_bincode_games(fp)
+            for game in games:
+                pc = game.get("player_count", 2)
+                for step in game["steps"]:
+                    board = step["board"]
+                    value = step.get("mcts_value", 0.5)
+                    pc_idx = max(0, min(pc - 2, 2))
+                    # progress from occupied cells
+                    occupied = np.count_nonzero(board)
+                    progress = min(occupied / 400.0, 1.0)
+                    # candidates from root_visits
+                    visits = step.get("root_visits", [])
+                    if not visits:
+                        continue
+                    n = min(len(visits), max_candidates)
+                    cand = {
+                        "piece": np.array([v["piece"] for v in visits[:n]], dtype=np.int64),
+                        "variant": np.array([v["variant"] for v in visits[:n]], dtype=np.int64),
+                        "x": np.array([v["x"] / 19.0 for v in visits[:n]], dtype=np.float32),
+                        "y": np.array([v["y"] / 19.0 for v in visits[:n]], dtype=np.float32),
+                        "size": np.array([PIECE_SIZES[v["piece"]] / 5.0 for v in visits[:n]], dtype=np.float32),
+                        "prob": np.array([v["probability"] for v in visits[:n]], dtype=np.float32),
+                    }
+                    # Normalize probs to sum to 1 (in case of floating point issues)
+                    s = cand["prob"].sum()
+                    if s > 0:
+                        cand["prob"] /= s
+                    self.samples.append({
+                        "board": board, "value": value, "pc_idx": pc_idx,
+                        "progress": progress, "candidates": cand,
+                    })
+
+        print(f"CandidateDataset: {len(self.samples)} samples")
+
+    def __len__(self):
+        return len(self.samples)
+
+    def __getitem__(self, idx: int) -> tuple:
+        s = self.samples[idx]
+        board = s["board"]
+        value = s["value"]
+        pc_idx = s["pc_idx"]
+        progress = s["progress"]
+        cand = s["candidates"]
+
+        if self.augment:
+            k = np.random.randint(0, 4)
+            flip = np.random.rand() > 0.5
+            board = np.rot90(board, k=k)
+            if flip:
+                board = np.fliplr(board)
+            # Transform candidate coordinates
+            xys = np.column_stack([cand["x"] * 19, cand["y"] * 19])
+            for _ in range(k):
+                xys[:, 0], xys[:, 1] = 19 - xys[:, 1], xys[:, 0]
+            if flip:
+                xys[:, 0] = 19 - xys[:, 0]
+            cand["x"] = xys[:, 0] / 19.0
+            cand["y"] = xys[:, 1] / 19.0
+
+        return (
+            torch.from_numpy(board.copy()).unsqueeze(0).float(),
+            torch.tensor(value, dtype=torch.float32),
+            torch.tensor(pc_idx, dtype=torch.long),
+            torch.tensor(progress, dtype=torch.float32),
+            {k: torch.from_numpy(v.copy()) for k, v in cand.items()},
+        )
+
+
 def export_flat(path_in: str, path_out_prefix: str):
     """
     將 .bin 轉為簡易二進位格式供其他語言使用：

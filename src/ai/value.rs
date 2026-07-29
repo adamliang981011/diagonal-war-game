@@ -6,6 +6,22 @@ use dashmap::DashMap;
 use tract_onnx::prelude::*;
 
 use crate::game::board::{Board, CellState};
+/// Candidate move for scoring network
+#[derive(Debug, Clone)]
+pub struct Candidate {
+    pub piece: u8,
+    pub variant: u8,
+    pub x: i8,
+    pub y: i8,
+    pub piece_size: u8,
+    pub heuristic_prior: f32,
+}
+
+/// Result of evaluate_with_candidates()
+pub struct PolicyResult {
+    pub value: f32,
+    pub priors: Vec<f32>,
+}
 
 /// NN 推論結果快取（key = board hash × player_count）
 static NN_CACHE: OnceLock<DashMap<u64, f32>> = OnceLock::new();
@@ -172,6 +188,96 @@ impl ValueNetwork {
         }
         let neural = self.evaluate(board, player, player_count);
         neural * blend + heuristic_val * (1.0 - blend)
+    }
+
+    /// Candidate Scoring Network evaluation
+    ///
+    /// Runs board encoder once, then scores all candidates in batch.
+    /// Returns (value, priors) where priors are softmax-normalized and
+    /// already blended with heuristic_prior using progress-based weights.
+    pub fn evaluate_with_candidates<const N: usize>(
+        &self, board: &Board<N>, candidates: &[Candidate],
+        _player: usize, player_count: usize, progress: f32,
+    ) -> Option<PolicyResult> {
+        let model = self.model.clone()?;
+        let max_n = 32;
+        let n = candidates.len().min(max_n);
+
+        if n == 0 { return None; }
+
+        // Build board input (1, 1, 20, 20)
+        let mut input = [0.0f32; 400];
+        for y in 0..N.min(20) {
+            for x in 0..N.min(20) {
+                input[y * 20 + x] = match board.cells[y][x] {
+                    CellState::Empty => 0.0,
+                    CellState::Occupied(p) => (p.0 as u8 + 1) as f32,
+                };
+            }
+        }
+        let board_t = tract_ndarray::Array4::from_shape_vec((1, 1, 20, 20), input.to_vec()).unwrap();
+
+        // Build candidate arrays (pad to 32)
+        let mut pieces = vec![0i64; max_n];
+        let mut variants = vec![0i64; max_n];
+        let mut xs = vec![0.0f32; max_n];
+        let mut ys = vec![0.0f32; max_n];
+        let mut sizes = vec![0.0f32; max_n];
+        for (i, c) in candidates.iter().enumerate().take(max_n) {
+            pieces[i] = c.piece as i64;
+            variants[i] = c.variant as i64;
+            xs[i] = c.x as f32 / 19.0;
+            ys[i] = c.y as f32 / 19.0;
+            sizes[i] = c.piece_size as f32 / 5.0;
+        }
+
+        let pc_idx = (player_count.saturating_sub(2).min(2)) as i64;
+
+        let result = model.run(tvec![
+            board_t.into_tensor().into(),
+            tract_ndarray::Array1::from_vec(vec![pc_idx]).into_tensor().into(),
+            tract_ndarray::Array1::from_vec(vec![progress as f64]).into_tensor().into(),
+            tract_ndarray::Array1::from_vec(pieces.clone()).into_tensor().into(),
+            tract_ndarray::Array1::from_vec(variants).into_tensor().into(),
+            tract_ndarray::Array1::from_vec(xs).into_tensor().into(),
+            tract_ndarray::Array1::from_vec(ys).into_tensor().into(),
+            tract_ndarray::Array1::from_vec(sizes).into_tensor().into(),
+        ]).ok()?;
+
+        if result.len() < 2 { return None; }
+
+        // output[0] = value (scalar), output[1] = scores (N,)
+        let value = result[1].clone().into_tensor()
+            .to_plain_array_view::<f32>().ok()
+            .and_then(|v| v.iter().copied().next())
+            .unwrap_or(0.5).clamp(0.0, 1.0);
+
+        let scores: Vec<f32> = result[0].clone().into_tensor()
+            .to_plain_array_view::<f32>().ok()
+            .map(|v| v.iter().copied().collect())
+            .unwrap_or_default();
+
+        if scores.len() < n { return None; }
+
+        // Softmax
+        let max_s = scores.iter().take(n).cloned().fold(f32::MIN, f32::max);
+        let shifted: Vec<f32> = scores.iter().take(n).map(|s| (s - max_s).exp()).collect();
+        let sum: f32 = shifted.iter().sum();
+        let mut priors: Vec<f32> = if sum > 0.0 {
+            shifted.iter().map(|s| s / sum).collect()
+        } else {
+            vec![1.0 / n as f32; n]
+        };
+
+        // Blend with heuristic prior
+        let nn_blend = if progress < 0.3 { 0.5 }
+                      else if progress < 0.7 { 0.7 }
+                      else { 0.9 };
+        for (p, c) in priors.iter_mut().zip(candidates.iter()) {
+            *p = *p * nn_blend + c.heuristic_prior * (1.0 - nn_blend);
+        }
+
+        Some(PolicyResult { value, priors })
     }
 
     /// 評估盤面 Value + Policy（雙頭網路）
