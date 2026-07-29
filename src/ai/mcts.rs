@@ -407,8 +407,36 @@ pub fn choose_move<const N: usize>(
     let iterations = config.iterations;
     let mut candidates = list_legal_moves(board, player, remaining_pieces, is_first_move, starting_corner);
     if candidates.is_empty() { return None; }
+
+    // Root Direct NN Prior：以 NN scoring 取代 heuristic order_moves
     let occupied = board.cells.iter().flatten().filter(|&&c| c != CellState::Empty).count() as f32;
-    move_ordering::order_moves(&mut candidates, board, player, remaining_pieces, occupied, 119.0);
+    let progress = (occupied / evaluate::TOTAL_PIECE_AREA).clamp(0.0, 1.0);
+    let root_cand_list: Vec<crate::ai::value::Candidate> = candidates.iter()
+        .map(|&(pi, vi, x, y, _)| {
+            let v = &remaining_pieces[pi].variants[vi];
+            let hp = move_ordering::compute_prior(board, v, x, y, player, progress).max(0.0);
+            crate::ai::value::Candidate {
+                piece: pi as u8, variant: vi as u8,
+                x: x as i8, y: y as i8,
+                piece_size: remaining_pieces[pi].base.cells.len() as u8,
+                heuristic_prior: hp,
+            }
+        })
+        .collect();
+
+    let vn = crate::ai::value::get_value_network();
+    if let Some(result) = vn.evaluate_with_candidates(board, &root_cand_list, player.0 as usize, player_count) {
+        // 以 NN prior 排序（降冪）
+        let mut scored: Vec<(usize, f32)> = candidates.iter().enumerate()
+            .map(|(i, _)| (i, result.priors.get(i).copied().unwrap_or(0.0)))
+            .collect();
+        scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
+        candidates = scored.iter().map(|&(i, _)| candidates[i].clone()).collect();
+        // 儲存 root value 到 search_state（可選，供後續使用）
+    } else {
+        // NN 不可用 → fallback heuristic order
+        move_ordering::order_moves(&mut candidates, board, player, remaining_pieces, occupied, 119.0);
+    }
 
     let all_players: Vec<PlayerId> = (0..player_count).map(PlayerId).collect();
     let n_threads = config.parallel_threads.max(1);
