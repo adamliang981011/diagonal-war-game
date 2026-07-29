@@ -426,13 +426,32 @@ pub fn choose_move<const N: usize>(
 
     let vn = crate::ai::value::get_value_network();
     if let Some(result) = vn.evaluate_with_candidates(board, &root_cand_list, player.0 as usize, player_count) {
+        let mut priors = result.priors.clone();
+        // Dirichlet Noise（self-play 時啟用）
+        if config.dirichlet_noise && !priors.is_empty() {
+            use rand::Rng;
+            let mut rng = rand::rng();
+            let n = priors.len();
+            // Dirichlet(alpha) via Gamma approximation: sample Gamma(alpha_i, 1) then normalize
+            let mut noise: Vec<f32> = (0..n).map(|_| {
+                let u: f32 = rng.random();
+                // Gamma(alpha, 1) approximated: (alpha = 0.3) → heavy tail
+                -u.ln() * config.dirichlet_alpha
+            }).collect();
+            let sum_n: f32 = noise.iter().sum();
+            if sum_n > 0.0 {
+                for v in noise.iter_mut() { *v /= sum_n; }
+                for (p, nv) in priors.iter_mut().zip(noise.iter()) {
+                    *p = *p * (1.0 - config.dirichlet_epsilon) + nv * config.dirichlet_epsilon;
+                }
+            }
+        }
         // 以 NN prior 排序（降冪）
         let mut scored: Vec<(usize, f32)> = candidates.iter().enumerate()
-            .map(|(i, _)| (i, result.priors.get(i).copied().unwrap_or(0.0)))
+            .map(|(i, _)| (i, priors.get(i).copied().unwrap_or(0.0)))
             .collect();
         scored.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal));
         candidates = scored.iter().map(|&(i, _)| candidates[i].clone()).collect();
-        // 儲存 root value 到 search_state（可選，供後續使用）
     } else {
         // NN 不可用 → fallback heuristic order
         move_ordering::order_moves(&mut candidates, board, player, remaining_pieces, occupied, 119.0);
@@ -483,15 +502,37 @@ pub fn choose_move<const N: usize>(
         }
     }
 
-    let best = merged.nodes[0].children.iter()
-        .max_by_key(|c| c.visits)
-        .map(|c| {
-            let avg = if c.visits > 0 { c.total_score / c.visits as f32 } else { 0.0 };
-            AiMove {
-                piece_index: c.piece_index, variant_index: c.variant_index,
-                x: c.x, y: c.y, score: (avg * 1000.0) as i32,
-            }
-        });
+    // Temperature-based move selection（self-play 時啟用）
+    let sel_progress = (occupied / evaluate::TOTAL_PIECE_AREA).clamp(0.0, 1.0);
+    let best = {
+        let temp = config.temperature_start * (1.0 - sel_progress) + config.temperature_end * sel_progress;
+        if temp > 0.1 && config.dirichlet_noise {
+            // Softmax sampling
+            use rand::Rng;
+            let weights: Vec<f32> = merged.nodes[0].children.iter()
+                .map(|c| (c.visits as f32).powf(1.0 / temp))
+                .collect();
+            let sum_w: f32 = weights.iter().sum();
+            let mut rng = rand::rng();
+            let mut roll: f32 = rng.random::<f32>() * sum_w;
+            merged.nodes[0].children.iter().zip(weights.iter()).enumerate()
+                .find_map(|(_i, (c, w))| {
+                    roll -= w;
+                    if roll <= 0.0 {
+                        let avg = if c.visits > 0 { c.total_score / c.visits as f32 } else { 0.0 };
+                        Some(AiMove { piece_index: c.piece_index, variant_index: c.variant_index, x: c.x, y: c.y, score: (avg * 1000.0) as i32 })
+                    } else { None }
+                })
+        } else {
+            // argmax visits
+            merged.nodes[0].children.iter()
+                .max_by_key(|c| c.visits)
+                .map(|c| {
+                    let avg = if c.visits > 0 { c.total_score / c.visits as f32 } else { 0.0 };
+                    AiMove { piece_index: c.piece_index, variant_index: c.variant_index, x: c.x, y: c.y, score: (avg * 1000.0) as i32 }
+                })
+        }
+    };
 
     // 填充 MctsOutput（供 self-play 使用）
     if let Some(ref b) = best {

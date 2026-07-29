@@ -19,6 +19,10 @@ pub struct MctsConfig {
     pub progress_mid: f32,
     /// 是否輸出 profiling 資訊（self-play 時關閉）
     pub print_profile: bool,
+    /// Root Dirichlet Noise（self-play 時啟用）
+    pub dirichlet_noise: bool,
+    pub dirichlet_alpha: f32,
+    pub dirichlet_epsilon: f32,
 }
 
 impl Default for MctsConfig {
@@ -44,6 +48,9 @@ pub fn official_config() -> MctsConfig {
         progress_op: 0.3,
         progress_mid: 0.7,
         print_profile: true,
+        dirichlet_noise: false,
+        dirichlet_alpha: 0.3,
+        dirichlet_epsilon: 0.25,
     }
 }
 
@@ -54,6 +61,7 @@ pub fn self_play_config() -> MctsConfig {
     cfg.temperature_start = 1.8;
     cfg.temperature_end = 0.5;
     cfg.print_profile = false;
+    cfg.dirichlet_noise = true;
     cfg
 }
 
@@ -74,5 +82,8 @@ pub fn bench_config() -> MctsConfig {
         progress_op: 0.3,
         progress_mid: 0.7,
         print_profile: true,
+        dirichlet_noise: false,
+        dirichlet_alpha: 0.3,
+        dirichlet_epsilon: 0.25,
     }
 }

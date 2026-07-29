@@ -129,7 +129,7 @@ pub fn choose_move_with_stats<const N: usize>(
 ) -> Option<(AiMove, MctsOutput)> {
     match difficulty {
         AiDifficulty::Mcts { iterations } => {
-            let mut cfg = crate::ai::config::official_config();
+            let mut cfg = crate::ai::config::self_play_config();
             cfg.iterations = iterations;
             let mut stats = None;
             let mv = mcts::choose_move(board, player, remaining_pieces, is_first_move, starting_corner, &cfg, player_count, &mut stats, &mut None);

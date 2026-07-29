@@ -2360,6 +2360,7 @@ dependencies = [
  "bincode",
  "dashmap",
  "rand 0.9.5",
+ "rand_distr",
  "serde",
  "serde_json",
  "thiserror 2.0.19",
